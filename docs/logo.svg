@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Workshop / identity emblem for the Build Wonders Over Antiquated Buildings mod. Matches the
+     Tower-mods family look (dark ground, gold frame, parchment art, serif wordmark). Motif: one
+     urban hex where a Wonder stands in place of the antiquated buildings it replaced - the old
+     buildings ghosted either side of it, the city walls kept along the tile's edge. -->
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#243042"/>
+      <stop offset="100%" stop-color="#121821"/>
+    </linearGradient>
+    <linearGradient id="parchment" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#f7eed1"/>
+      <stop offset="100%" stop-color="#e7d4a3"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#e7d4a3" stop-opacity="0.30"/>
+      <stop offset="100%" stop-color="#e7d4a3" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1024" height="1024" fill="url(#bg)"/>
+  <!-- Gold frame to echo the in-game parchment/gold palette -->
+  <rect x="26" y="26" width="972" height="972" rx="30" fill="none" stroke="#c9a24c" stroke-width="4" opacity="0.5"/>
+
+  <!-- The Wonder's light over the tile -->
+  <circle cx="512" cy="430" r="330" fill="url(#glow)"/>
+
+  <!-- The tile: one urban hex -->
+  <polygon points="812,430 662,689.8 362,689.8 212,430 362,170.2 662,170.2"
+           fill="#2b3648" fill-opacity="0.55" stroke="#c9a24c" stroke-width="6" stroke-linejoin="round"/>
+
+  <!-- The antiquated buildings, ghosted: what the Wonder is built over -->
+  <g fill="url(#parchment)" fill-opacity="0.10" stroke="#e7d4a3" stroke-opacity="0.75"
+     stroke-width="4.5" stroke-linejoin="round" stroke-dasharray="12 9">
+    <path d="M268,506 L306,470 L344,506 L344,552 L268,552 Z"/>
+    <path d="M680,506 L718,470 L756,506 L756,552 L680,552 Z"/>
+  </g>
+
+  <!-- The Wonder: a temple on its stylobate -->
+  <g fill="url(#parchment)" stroke="#c9a24c" stroke-width="4" stroke-linejoin="round">
+    <!-- Pediment -->
+    <polygon points="512,300 660,406 364,406"/>
+    <!-- Architrave -->
+    <rect x="368" y="406" width="288" height="28" rx="3"/>
+    <!-- Columns -->
+    <rect x="392" y="434" width="30" height="112" rx="3"/>
+    <rect x="444" y="434" width="30" height="112" rx="3"/>
+    <rect x="497" y="434" width="30" height="112" rx="3"/>
+    <rect x="550" y="434" width="30" height="112" rx="3"/>
+    <rect x="602" y="434" width="30" height="112" rx="3"/>
+    <!-- Stylobate -->
+    <rect x="372" y="546" width="280" height="26" rx="3"/>
+    <rect x="354" y="572" width="316" height="22" rx="3"/>
+  </g>
+
+  <!-- The walls, kept: a crenellated course along the tile's lower edge -->
+  <g fill="url(#parchment)" stroke="#c9a24c" stroke-width="4" stroke-linejoin="round">
+    <rect x="352" y="648" width="320" height="38" rx="3"/>
+    <rect x="358" y="626" width="36" height="24" rx="2"/>
+    <rect x="416" y="626" width="36" height="24" rx="2"/>
+    <rect x="474" y="626" width="36" height="24" rx="2"/>
+    <rect x="532" y="626" width="36" height="24" rx="2"/>
+    <rect x="590" y="626" width="36" height="24" rx="2"/>
+    <rect x="630" y="626" width="36" height="24" rx="2"/>
+  </g>
+
+  <!-- Wordmark -->
+  <text x="512" y="838" text-anchor="middle"
+        font-family="Georgia, 'Times New Roman', serif" font-size="92"
+        font-weight="bold" fill="#e7d4a3" letter-spacing="2">BUILD WONDERS</text>
+  <!-- Tagline -->
+  <text x="512" y="902" text-anchor="middle"
+        font-family="Georgia, 'Times New Roman', serif" font-size="40"
+        fill="#c9a24c" opacity="0.92">Over Antiquated Buildings</text>
+</svg>

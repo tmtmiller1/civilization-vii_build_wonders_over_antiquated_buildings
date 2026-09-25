@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Build Wonders Over Antiquated Buildings
+
+  On the Wonder placement screen, urban tiles whose buildings are all from an earlier age are
+  offered as sites. Choosing one clears the tile (its buildings go, its walls stay), queues the
+  Wonder there through the game's own path, and hands the displaced citizens to the game's Grow
+  City prompt so the player places them. The tile becomes a real Wonder district.
+
+  No database change. Wonders keep their class, uniqueness, cinematics, terrain rules and AI
+  behaviour. One script. Every engine step was watched on 1.5.0; see docs/RECIPE.md.
+
+  AffectsSavedGames=0: nothing is added to the database, so a save loads with the mod on or off,
+  and a Wonder already built this way is ordinary constructible state.
+-->
+<Mod id="tower-build-wonders-over-antiquated-buildings" version="1" xmlns="ModInfo">
+	<Properties>
+		<Name>LOC_BWAB_NAME</Name>
+		<Description>LOC_BWAB_DESCRIPTION</Description>
+		<Authors>Tower</Authors>
+		<Package>BuildWondersOverAntiquatedBuildings</Package>
+		<PackageSortIndex>1000</PackageSortIndex>
+		<AffectsSavedGames>0</AffectsSavedGames>
+		<ShowInBrowser>1</ShowInBrowser>
+		<Version>0.3.0</Version>
+	</Properties>
+	<Dependencies>
+		<Mod id="base-standard" title="LOC_MODULE_BASE_STANDARD_NAME"/>
+	</Dependencies>
+	<ActionCriteria>
+		<Criteria id="always">
+			<AlwaysMet></AlwaysMet>
+		</Criteria>
+	</ActionCriteria>
+	<ActionGroups>
+		<!-- Shell scope: the name and description render in the Additional Content browser,
+		     which runs before any game is loaded. -->
+		<ActionGroup id="bwab-shell" scope="shell" criteria="always">
+			<Actions>
+				<UpdateText>
+					<Item>text/en_us/ModText.xml</Item>
+				</UpdateText>
+			</Actions>
+		</ActionGroup>
+		<ActionGroup id="bwab-game" scope="game" criteria="always">
+			<Actions>
+				<UpdateText>
+					<Item>text/en_us/ModText.xml</Item>
+				</UpdateText>
+				<UIScripts>
+					<Item>ui/bwab-clear-and-build.js</Item>
+				</UIScripts>
+			</Actions>
+		</ActionGroup>
+	</ActionGroups>
+</Mod>
