@@ -746,7 +746,7 @@ function uninstall() {
 
 if (!G[KEY]) {
   G[KEY] = {
-    version: "0.3.0",
+    version: "1.0.0",
     /** Kill switch: false makes every wrap pass straight through. */
     set enabled(v) { state.enabled = !!v; },
     get enabled() { return state.enabled; },

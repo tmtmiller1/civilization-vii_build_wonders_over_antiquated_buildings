@@ -1,5 +1,5 @@
 [h1]Build Wonders Over Antiquated Buildings[/h1]
-[b]Version 0.3.0, the first release. For Civilization VII 1.5.0.[/b]
+[b]Version 1.0.0, the first release. For Civilization VII 1.5.0.[/b]
 A city that filled its centre in Antiquity has nowhere left to put a Wonder. This mod lets you build one over the buildings that age left behind. Pick a Wonder in production and urban tiles whose buildings are all from an earlier age are offered as sites alongside the usual ones. Choose one: the old buildings are cleared, the walls stay, the citizens they housed are yours to place through the game's own Grow City prompt, and the Wonder rises on a proper Wonder district. No database changes, so a Wonder built this way is the same Wonder the game ships: its class, its one-in-the-world uniqueness, its cinematics, its terrain rules, the bonus its neighbours read from a Wonder district, and everything the AI does are untouched.
 [h2]Mechanics[/h2]
 [list]

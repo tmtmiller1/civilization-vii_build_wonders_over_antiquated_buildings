@@ -4,7 +4,7 @@ All notable changes to Build Wonders Over Antiquated Buildings are documented he
 versioning. The history of the routes that were tried before this design, and the probe runs behind them, is in
 `mod_ideas_tested/build_wonders_over_antiquated_buildings/CHANGELOG-2026-09-24-before-split.md`.
 
-## [0.3.0] - 2026-09-24
+## [1.0.0] - 2026-09-24
 
 The shipped design, moved into `tower_mods/` on its own, brought to the repo's code standard, and watched working
 from this folder (runs `pb6`, `pb7`, `pb8` on 1.5.0, 2026-09-24).
