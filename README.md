@@ -157,6 +157,8 @@ gallery/                            the screenshots used above
 devtools/README.md                  where the harness lives (mod_ideas_tested) and the one command to re-verify
 eslint.config.js, tsconfig.json, types/, package.json, scripts/   dev tooling, not shipped
 install-dev.sh                      copies the mod into the game's Mods folder
+release.sh                          builds dist/: the release zip, the Workshop preview and the steamcmd manifest
+CHANGELOG.steam.txt                 the Workshop change notes, kept in step with CHANGELOG.md by scripts/steam-changelog.mjs
 ```
 
 `npm run verify` runs everything that can be checked without the game: `tsc --noEmit` over the JSDoc types,
