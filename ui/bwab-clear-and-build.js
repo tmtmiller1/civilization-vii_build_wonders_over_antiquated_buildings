@@ -14,8 +14,9 @@
 //
 // How it hooks the placement screen: the screen renders Game.CityOperations.canStart(BUILD). The
 // wrap appends eligible tiles to `Plots` for a WONDER, answers Success for the per-plot check the
-// commit path makes, and intercepts sendRequest(BUILD, {X, Y}) at one of those tiles to confirm,
-// clear, and forward.
+// commit path makes, and intercepts sendRequest(BUILD, {X, Y}) at one of those tiles to clear and
+// forward. There is no confirmation of its own: placing a Wonder on one of these tiles is the same
+// click as placing it on an empty tile.
 //
 // Which tiles: lib/bwab-eligibility.js (every occupant previous-age, none AGELESS; walls ignored
 // and kept). Which Wonders for a tile: the Wonder's own placement rules, evaluated here; a rule this
@@ -368,61 +369,6 @@ function isInjected(cityID, def, plot) {
   return hit ? hit.plots.includes(plot) : eligiblePlotsFor(cityID, def).includes(plot);
 }
 
-// --- the confirmation --------------------------------------------------------------------------
-
-/** @param {string[]} names @returns {string} "A", "A and B", "A, B and C". */
-function joinNames(names) {
-  if (names.length <= 1) return names[0] || "";
-  const head = names.slice(0, -1).join(", ");
-  return Locale.compose("LOC_BWAB_LIST_AND", head, names[names.length - 1]);
-}
-
-/**
- * The confirmation body: what goes, that the player will place the citizens, that walls stay.
- * @param {Tile} tile @param {*} def @returns {string}
- */
-function confirmBody(tile, def) {
-  const gone = tile.constructibles.filter((c) => !c.existingDistrictOnly);
-  const names = gone.map((c) => safe(() => Locale.compose(defOf(c.type).Name), c.type));
-  const lost = gone.filter((c) => c.houses).length;
-  const parts = [Locale.compose("LOC_BWAB_CLEAR_BODY", joinNames(names), Locale.compose(def.Name))];
-  if (lost) parts.push(Locale.compose("LOC_BWAB_CLEAR_CITIZENS", lost));
-  if (tile.constructibles.some((c) => c.existingDistrictOnly)) parts.push(Locale.compose("LOC_BWAB_CLEAR_WALLS"));
-  return parts.join(" ");
-}
-
-/**
- * Ask, then proceed. `globalThis.__bwabAutoConfirm = true` skips the dialog (probes only). Without a
- * dialog available, the tile is NOT cleared: never clear unasked.
- *
- * `DialogBoxAction` is an export of that module, not an engine global, so the Confirm value is read
- * off the module. The dialog is raised on a deferred tick: Civ VII will not give input to a modal
- * raised from inside the event that asked for it (the same lesson as the Emigration dilemma modal).
- * @param {Tile} tile @param {*} def @param {() => void} proceed
- */
-async function confirmThen(tile, def, proceed) {
-  if (G.__bwabAutoConfirm) { log("auto-confirm (probe)"); proceed(); return; }
-  try {
-    const mod = /** @type {*} */ (await import("/core/ui/dialog-box/manager-dialog-box.js"));
-    const manager = mod && (mod.DialogBoxManager || mod.default);
-    if (!manager || typeof manager.createDialog_ConfirmCancel !== "function") {
-      log("DialogBoxManager.createDialog_ConfirmCancel unavailable; not clearing without a confirmation");
-      return;
-    }
-    const confirm = mod.DialogBoxAction && mod.DialogBoxAction.Confirm != null ? mod.DialogBoxAction.Confirm : 1;
-    const params = {
-      title: Locale.compose(def.Name),
-      body: confirmBody(tile, def),
-      callback: (/** @type {*} */ action) => { if (action === confirm) proceed(); else log("player cancelled"); },
-    };
-    setTimeout(() => {
-      try { manager.createDialog_ConfirmCancel(params); } catch (e) { log("confirmation failed to open (" + e + ")"); }
-    }, 80);
-  } catch (e) {
-    log("no confirmation dialog available (" + e + "); not clearing without one");
-  }
-}
-
 // --- the clear ------------------------------------------------------------------------------------
 
 /**
@@ -695,7 +641,7 @@ function wrapCanStart(oCan) {
 }
 
 /**
- * The sendRequest wrap: a Wonder BUILD at an injected tile is confirmed, cleared, then forwarded.
+ * The sendRequest wrap: a Wonder BUILD at an injected tile is cleared, then forwarded.
  * @param {Function} oSend The engine's sendRequest, bound.
  */
 function wrapSendRequest(oSend) {
@@ -706,7 +652,7 @@ function wrapSendRequest(oSend) {
     if (!tile || tile.districtType !== "DISTRICT_URBAN") return oSend(cityID, type, args, ...rest);
     const local = safe(() => GameContext.localPlayerID, -1);
     const forward = () => oSend(cityID, type, args, ...rest);
-    confirmThen(tile, def, () => clearAndBuild({ cityID, def, tile, forward, local }));
+    clearAndBuild({ cityID, def, tile, forward, local });
     return true;
   };
 }

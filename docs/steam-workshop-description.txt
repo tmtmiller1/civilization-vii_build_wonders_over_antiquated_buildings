@@ -9,16 +9,15 @@ A city that filled its centre in Antiquity has nowhere left to put a Wonder. Thi
 [*][b]No empty hex.[/b] The clear and the build order go to the game in the same instant, so the tile goes straight from its old buildings to the Wonder's construction site.
 [*][b]The walls stay.[/b] Clearing a tile takes its district down, and walls go with it; the mod puts them back on the Wonder's district when it lands. The mod never destroys a wall.
 [*][b]Your citizens are not lost.[/b] One citizen per building that housed one comes back as a pending population point once the Wonder is standing, and the game's own Grow City prompt asks where each one settles: a rural tile or a specialist seat, wherever you like.
-[*][b]A confirmation before anything is cleared.[/b] It names the buildings by name, says how many displaced citizens you will be asked to place, and says the walls stay when the tile has any. Cancel and nothing happens.
 [*][b]It decides where, never whether.[/b] A Wonder that is locked, not yet unlocked, or already standing somewhere in the world stays refused, exactly as the base game refuses it. The mod only ever answers the one refusal that means there is nowhere to put it.
 [*][b]The Wonder's own rules still decide.[/b] Terrain, biome, river, no-feature, adjacent terrain, adjacent district, adjacent mountain, adjacent constructible, invalid adjacent biomes, homeland or distant lands, and a required constructible in the settlement are all checked before a tile is offered for a given Wonder. A rule the mod does not evaluate excludes that Wonder rather than guessing: one that must stand on a feature, beside a lake, or on an appeal-chosen site is never offered an antiquated tile. The five Coast Wonders are offered a coastal urban tile only when the game already accepts that Wonder on a bare coast tile of the same city. So the mod will sometimes offer less than it could and never more.
-[*][b]A refusal costs you nothing.[/b] The game will not say whether a Wonder fits a tile until the tile is empty, and it enforces rules no mod can read in advance. If it turns the cleared site down, the mod puts the buildings and walls back within a few seconds, no citizens are displaced (they are only added once the Wonder is standing), and nothing is lost but the confirmation you pressed.
+[*][b]A refusal costs you nothing.[/b] The game will not say whether a Wonder fits a tile until the tile is empty, and it enforces rules no mod can read in advance. If it turns the cleared site down, the mod puts the buildings and walls back within a few seconds, no citizens are displaced (they are only added once the Wonder is standing), and nothing is lost.
 [*][b]A yield preview on the offered tile.[/b] The placement screen shows what the swap is worth: the Wonder's yields, less the yields of the buildings that would go, plus the maintenance they would stop costing.
 [*][b]No database change at all.[/b] One script, no data files, nothing added to the game's tables.
 [*][b]Readable, un-minified source.[/b]
 [/list]
 [h2]What the player does[/h2]
-Start a Wonder in a city that has run out of open ground. On the placement screen, tiles holding only antiquated buildings are selectable. Click one and confirm. The tile is cleared, the Wonder is queued there, and before the turn can end the Grow City prompt asks you to place each displaced citizen. The Wonder then builds and completes with the game's own Wonder cinematic.
+Start a Wonder in a city that has run out of open ground. On the placement screen, tiles holding only antiquated buildings are selectable. Click one, as you would an empty tile. The tile is cleared, the Wonder is queued there, and before the turn can end the Grow City prompt asks you to place each displaced citizen. The Wonder then builds and completes with the game's own Wonder cinematic.
 [h2]Which tiles qualify[/h2]
 [list]
 [*][b]Yes:[/b] one antiquated building, or two or more, on an urban tile.
@@ -36,13 +35,13 @@ The tile. Those buildings' yields and maintenance are gone, the city has fewer b
 [*][b]Multiplayer.[/b] Watched in a live LAN game: the clear, the build and the displaced citizens all went through the network session, and a competing placement was refused by the game and rolled back intact.
 [/list]
 [h2]Languages[/h2]
-English only for now. The mod's text is six strings, so a translation is a very small job: ask for a language and I will add it.
+English only for now. The mod's text is two strings, so a translation is a very small job: ask for a language and I will add it.
 [h2]Caveats and known issues[/h2]
 [list]
 [*][b]A refusal leaves the hex empty for a few seconds.[/b] The mod waits about three seconds for the Wonder to appear before it puts the tile back.
 [*][b]The yield preview is a first-order figure.[/b] It counts the Wonder's own yields, the yields of the buildings that would go, and their maintenance. Yields a Wonder grants only under some condition, and adjacency the old buildings were receiving, are not in it.
 [*][b]The AI does not do this.[/b] Opponents build Wonders exactly as they always have; the mod adds sites to your placement screen only.
-[*][b]Clearing happens when you confirm,[/b] not when the Wonder finishes. The buildings come back only if the game refuses the site.
+[*][b]Clearing happens when you place the Wonder,[/b] not when it finishes. The buildings come back only if the game refuses the site.
 [/list]
 [h2]Still coming[/h2]
 [list]

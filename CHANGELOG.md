@@ -18,7 +18,8 @@ from this folder (runs `pb6`, `pb7`, `pb8` on 1.5.0, 2026-09-24).
   hands the displaced citizens to the game's Grow City prompt. Watched end to end on two tiles, one with walls
   (run `pb5`, under the old name): both became real `DISTRICT_WONDER` tiles, population unchanged once placed,
   walls preserved.
-- The confirmation text is localised (`LOC_BWAB_CLEAR_*`); it was hardcoded English.
+- Placing a Wonder on an antiquated tile is one click, the same as placing it on an empty tile: the mod raises no
+  confirmation of its own.
 - A kill switch (`globalThis.__bwab.enabled = false`) and an `uninstall()` that restores the engine's own
   `canStart` and `sendRequest`.
 - `lib/bwab-eligibility.js`: the tile rule. One antiquated building or several qualifies; one antiquated beside
@@ -31,11 +32,6 @@ from this folder (runs `pb6`, `pb7`, `pb8` on 1.5.0, 2026-09-24).
 - The per-plot acceptance read a cache that only a prior list-the-plots call filled, so a commit that arrived
   without one was refused (`pb8`). The placement screen always lists first, so this never showed in play, but
   nothing guarantees that order. `isInjected` now recomputes on a cache miss.
-- The confirmation read `DialogBoxAction.Confirm` as if it were an engine global. It is an export of
-  `/core/ui/dialog-box/model-dialog-box.js`; the guarded read was falling through to a hardcoded `1`, which
-  happens to be the right value. It is taken off the imported module now.
-- The confirmation is raised on a deferred tick. A modal raised from inside the event that asked for it does not
-  reliably take input in Civ VII (the same lesson as the Emigration dilemma modal).
 
 ### Watched, on this folder's build
 
@@ -44,8 +40,6 @@ from this folder (runs `pb6`, `pb7`, `pb8` on 1.5.0, 2026-09-24).
 - Population is conserved: Leeds 26 -> 26 (urban 15 -> 13, rural 9 -> 11), Philadelphia 16 -> 16 (urban 6 -> 4,
   rural 10 -> 12), with the displaced points handed to the game's own Grow City screen
   (`INTERFACEMODE_ACQUIRE_TILE`) and `pendingPopulation` back to 0 once placed.
-- The confirmation renders natively and its text composes: "Amphitheater and Academy will be cleared to build
-  Buseoksa here. You will be asked where the 2 displaced citizens settle." Pressing OK drove the clear.
 - Live network multiplayer (`pb18`, a fresh Exploration-age LAN game): Grand Bazaar offered on an antiquated tile,
   cleared and built over the network session, population conserved; a second, competing placement was refused by
   the engine and rolled back intact.

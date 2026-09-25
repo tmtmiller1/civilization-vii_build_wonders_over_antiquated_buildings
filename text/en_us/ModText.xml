@@ -11,19 +11,5 @@
         <Row Tag="LOC_BWAB_DESCRIPTION">
             <Text>Lets a Wonder be built on an urban tile whose buildings are all from an earlier age. Pick the tile on the Wonder placement screen: the old buildings are cleared, the walls stay, the displaced citizens are yours to place through the usual Grow City prompt, and the Wonder rises on a proper Wonder district. If the game refuses the site after all, the tile is put back. No database changes; Wonders stay exactly as they are.</Text>
         </Row>
-
-        <!-- The confirmation shown before a tile is cleared. -->
-        <Row Tag="LOC_BWAB_CLEAR_BODY">
-            <Text>{1_Buildings} will be cleared to build {2_Wonder} here.</Text>
-        </Row>
-        <Row Tag="LOC_BWAB_CLEAR_CITIZENS">
-            <Text>You will be asked where the {1_Num} displaced {1_Num: plural 1?citizen; other?citizens;} settle.</Text>
-        </Row>
-        <Row Tag="LOC_BWAB_CLEAR_WALLS">
-            <Text>The walls stay.</Text>
-        </Row>
-        <Row Tag="LOC_BWAB_LIST_AND">
-            <Text>{1_A} and {2_B}</Text>
-        </Row>
     </EnglishText>
 </Database>

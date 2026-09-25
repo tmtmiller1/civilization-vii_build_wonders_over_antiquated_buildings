@@ -25,21 +25,13 @@ usual ones.
 
 *The placement screen, with the mod's tile selected and the yield result the mod computes for it.*
 
-Choose one, and a confirmation, titled with the Wonder's name, names the buildings that will be cleared, says how
-many displaced citizens you will be asked to place, and says the walls stay when the tile has any. Cancel and
-nothing happens.
-
-![The confirmation before a tile is cleared](gallery/02-confirmation.jpg)
-
-*"Amphitheater and Academy will be cleared to build Buseoksa here. You will be asked where the 2 displaced
-citizens settle."*
-
-Confirm, and the buildings' demolition, the district's demolition and the Wonder's build order all go to the game
-in the same instant, so the tile goes straight from its old buildings to the Wonder's construction site and no
-empty ground is ever drawn. Walls come down with the district and are re-created on the Wonder's district a
-moment after it lands. Once the Wonder is standing, one citizen per building that housed one becomes pending
-population, and before the turn can end the game's own Grow City prompt asks where each settles - a rural tile
-or a specialist seat, wherever you like.
+Choose one, exactly as you would choose an empty tile; the mod adds no prompt of its own. The buildings'
+demolition, the district's demolition and the Wonder's build order all go to the game in the same instant, so the
+tile goes straight from its old buildings to the Wonder's construction site and no empty ground is ever drawn.
+Walls come down with the district and are re-created on the Wonder's district a moment after it lands. Once the
+Wonder is standing, one citizen per building that housed one becomes pending population, and before the turn can
+end the game's own Grow City prompt asks where each settles - a rural tile or a specialist seat, wherever you
+like.
 
 ![The game's Grow City screen holding the displaced citizens](gallery/03-place-population.jpg)
 
@@ -95,8 +87,8 @@ the tile back: the buildings it destroyed are re-created, then the walls, and it
 confirm everything is standing. No citizens are displaced, because they are only added once the Wonder is on the
 tile. The hex is empty for those few seconds and then holds what it held before. Watched on a coastal Wonder
 whose every readable rule passed and which the engine still refused - the tile came back holding its Lighthouse,
-with population, urban and rural counts unchanged and nothing left pending. The cost of a refusal is a wasted
-confirmation, not a lost building.
+with population, urban and rural counts unchanged and nothing left pending. The cost of a refusal is a few seconds
+of empty hex, not a lost building.
 
 ## The yield preview
 
@@ -124,7 +116,7 @@ the Wonder from then on. The citizens are not lost: the head count is unchanged 
   settlement. The AI builds Wonders exactly as it always has.
 - **Multiplayer.** Watched in a live LAN game: the clear, the build and the displaced citizens all went through
   the network session, and a competing placement was refused by the game and rolled back intact.
-- English only for now. The mod's text is six strings, so a translation is a small job.
+- English only for now. The mod's text is two strings, so a translation is a small job.
 
 ## Installation
 
@@ -137,7 +129,7 @@ the Wonder from then on. The citizens are not lost: the head count is unchanged 
 
 Watched working end to end on Civilization VII 1.5.0, 2026-09-24, including a real mouse click on the hex, both
 the one-building and two-building cases, walls preserved on a hill tile, population conserved on both, the
-confirmation rendering and driving the clear, the yield preview reading on the hex and in the panel, and a
+click going straight to the clear with no prompt of the mod's own, the yield preview reading on the hex and in the panel, and a
 refusal rolling the tile back with nothing lost, the whole thing in a live LAN game, and the tile going from
 its buildings straight to the Wonder's construction site with no empty ground drawn in between. Every step and
 the run that proved it is in [docs/RECIPE.md](docs/RECIPE.md).
@@ -148,7 +140,7 @@ the run that proved it is in [docs/RECIPE.md](docs/RECIPE.md).
 build-wonders-over-antiquated-buildings.modinfo   one script, no data
 ui/bwab-clear-and-build.js          the mod: placement-screen hooks, the clear, the walls, the yield preview, the rollback
 lib/bwab-eligibility.js             the antiquated-tile rule, engine-free, 23 tests
-text/en_us/ModText.xml              name, description, the confirmation text
+text/en_us/ModText.xml              name and description
 tests/eligibility.mjs               the rule's tests
 docs/RECIPE.md                      every step and the run that proved it
 docs/steam-workshop-description.md  the Workshop page text

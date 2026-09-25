@@ -2,10 +2,10 @@
 
 **Build Wonders Over Antiquated Buildings works, end to end, with no data change at all.** Watched on 1.5.0,
 2026-09-24: `pb5` under the mod's old name, then `pb6`, `pb7` and `pb8` against this folder after the rename.
-`pb6` drove it through the mod's own hooks exactly as a player's click drives them, and pressed the mod's own
-confirmation with a real button press; `pb7` read and photographed the Wonder placement screen; `pb8` committed
-without listing first (the case that found the cache fix below), placed the displaced citizens through the game's
-own Grow City screen, and photographed the finished tiles.
+`pb6` drove it through the mod's own hooks exactly as a player's click drives them, through the confirmation
+the mod had at the time (removed since: placing is one click now, `pb8-nodialog`); `pb7` read and photographed
+the Wonder placement screen; `pb8` committed without listing first (the case that found the cache fix below),
+placed the displaced citizens through the game's own Grow City screen, and photographed the finished tiles.
 
 ```
 T1  plot 2780  ["BUILDING_AMPHITHEATER","BUILDING_ACADEMY"]                 both Antiquity, DISTRICT_URBAN
@@ -26,10 +26,9 @@ Wonders is touched. The mod clears the tile and lets the game build on it.
 ## What the player does
 
 Pick a Wonder in production. Urban tiles whose buildings are all antiquated now show as valid sites alongside the
-usual ones. Choose one; a confirmation names what will be cleared, says the walls stay, and says you will be asked
-where the displaced citizens settle. Confirm. The tile is cleared, the Wonder is queued there, and the game's own
-Grow City prompt asks you to place each displaced citizen (rural tile or specialist seat, wherever you like) before
-the turn can end.
+usual ones. Choose one, as you would an empty tile; the mod adds no prompt of its own. The tile is cleared, the
+Wonder is queued there, and the game's own Grow City prompt asks you to place each displaced citizen (rural tile or
+specialist seat, wherever you like) before the turn can end.
 
 ## What qualifies: the rule (`lib/bwab-eligibility.js`, 23 tests)
 
@@ -74,9 +73,9 @@ actually landing on a coastal urban tile needs a game where the engine accepts i
 | the citizens | `city.addRuralPopulation(1)` per point destroyed; the game's Grow City prompt does the rest | `pj10`, `pb5` |
 | the walls | the district takes them down; `CREATE_ELEMENT {Kind:"CONSTRUCTIBLE", Type, Location, Owner}` puts them back on the Wonder district when it lands (walls are valid on `DISTRICT_WONDER` in shipped data) | `pb5`, `pb6` |
 | the placement screen highlights the tile | `BuildingPlacementManager` pushes every plot of the `canStart` result into `urbanPlots`, and `isPlotIndexSelectable(ourPlot)` (the test a click makes) answers true | `pb7` |
-| the confirmation | `DialogBoxManager.createDialog_ConfirmCancel`, raised on a deferred tick; the OK press drives the clear | `pb6` |
+| no prompt of the mod's own | the commit the placement screen sends goes straight to the clear and the build; the confirmation `pb6` photographed was removed | `pb8-nodialog` |
 | the displaced citizens reach the player's own screen | `INTERFACEMODE_ACQUIRE_TILE` with `panel-place-population` in the DOM, the game's Grow City placement screen, holding the points the clear created; placing them took `pendingPopulation` to 0 | `pb8` |
-| a player's own click drives all of it | a human clicked the hex and the confirmation; the clear followed from that click | `pb14` |
+| a player's own click drives all of it | a human clicked the hex (and the confirmation the mod had then); the clear followed from that click | `pb14` |
 | one antiquated building beside a free slot (case B) | the same clear with one destroy instead of two; population conserved | `pb14`, `pb15` |
 | a refusal costs nothing | the engine refused the cleared plot, and the buildings and district were put back | `pb15` |
 | a live network game | a fresh Exploration-age LAN session: Grand Bazaar offered on an antiquated tile, cleared and built to `DISTRICT_WONDER` over the network, population conserved; a competing placement was refused (one per player) and rolled back intact | `pb18` |
@@ -99,9 +98,7 @@ T2  plot 3912  Blacksmith + Academy + WALLS    -> WONDER_EL_ESCORIAL DISTRICT_WO
       pop 16 -> 16   urban 6 -> 4     rural 10 -> 12  walls PRESERVED
 ```
 
-Population is conserved: the citizens the cleared buildings housed come back as points the player places. The
-confirmation read "Amphitheater and Academy will be cleared to build Buseoksa here. You will be asked where the 2
-displaced citizens settle." - composed, no raw tags, correct plural - and the OK press did the rest. The game
+Population is conserved: the citizens the cleared buildings housed come back as points the player places. The game
 played its own Wonder completion cinematic ("New Wonder - BUSEOKSA - Leeds, 1050 CE"), which is the engine
 treating it as the ordinary Wonder it is.
 
@@ -174,12 +171,11 @@ What is left:
 
 - **Two people placing at once.** In `pb18` the probe and the player each committed Grand Bazaar within six
   seconds; the engine took the first and refused the second, and the rollback restored the second tile. The mod
-  behaved, but a probe's `__bwabAutoConfirm` is global and skipped the player's dialog: never leave it set in a game
-  a person is playing.
+  behaved. (It had a confirmation of its own at the time, which a probe flag had skipped; both are gone now.)
 - **A coast Wonder actually landing on a coastal urban tile.** The gate needs the engine to accept that Wonder
   on some bare coast tile of the city first; no save to hand has one.
-- **Whether any tile is ever refused now.** If one is, the cost is the three-second empty hex and a wasted
-  confirmation, not a lost building.
+- **Whether any tile is ever refused now.** If one is, the cost is the three-second empty hex, not a lost
+  building.
 
 ## The two designs this replaced
 
