@@ -94,8 +94,13 @@ from this folder (runs `pb6`, `pb7`, `pb8` on 1.5.0, 2026-09-24).
   accepted. The readable parts (adjacent to land, not a Lake, Distant Lands, no Tundra neighbour) are still
   checked. Refusal side watched (`pb25`); a coast Wonder landing on a coastal urban tile is not.
 
-### Known, minor
+### Added: a yield preview for the tiles the mod offers
 
-- A tile the mod adds has no `PlacementPlotData`, so the placement panel's yield-delta lookup for it logs
-  `Failed to find PlacementPlotData for plotIndex <n>` and returns nothing. Soft: no throw, the screen opens, the
-  tile stays selectable. The player loses the yield preview on that one tile.
+- The engine prices a Wonder only for the plots it would itself offer, so a tile this mod adds had no
+  `PlacementPlotData`: the placement panel logged `Failed to find PlacementPlotData for plotIndex <n>`, drew no
+  yields on the hex and no breakdown in the panel, and the tile could never be one of the screen's
+  recommendations. The mod now answers the placement manager's per-plot lookup for its own tiles with an entry in
+  the engine's own shape: the Wonder's base yields, minus the yields of each building that would go, plus the
+  maintenance they would stop costing. The engine's own answer wins whenever it has one, so ordinary plots are
+  untouched. Watched (`pb12`): the figure reads on the hex and in the panel. It is a first-order figure;
+  conditional Wonder yields and adjacency the old buildings were receiving are not modelled.

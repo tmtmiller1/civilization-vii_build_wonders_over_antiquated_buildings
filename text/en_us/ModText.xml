@@ -9,7 +9,7 @@
             <Text>Build Wonders Over Antiquated Buildings</Text>
         </Row>
         <Row Tag="LOC_BWAB_DESCRIPTION">
-            <Text>Lets a Wonder be built on an urban tile whose buildings are all from an earlier age. Pick the tile on the Wonder placement screen: the old buildings are cleared, the walls stay, the displaced citizens are yours to place through the usual Grow City prompt, and the Wonder rises on a proper Wonder district. No database changes; Wonders stay exactly as they are.</Text>
+            <Text>Lets a Wonder be built on an urban tile whose buildings are all from an earlier age. Pick the tile on the Wonder placement screen: the old buildings are cleared, the walls stay, the displaced citizens are yours to place through the usual Grow City prompt, and the Wonder rises on a proper Wonder district. If the game refuses the site after all, the tile is put back. No database changes; Wonders stay exactly as they are.</Text>
         </Row>
 
         <!-- The confirmation shown before a tile is cleared. -->

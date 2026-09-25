@@ -25,16 +25,21 @@ usual ones.
 
 *The placement screen, with the mod's tile selected and the yield result the mod computes for it.*
 
-Choose one, and a confirmation names what will be cleared, says the walls stay, and says how many displaced
-citizens you will be asked to place. Cancel and nothing happens.
+Choose one, and a confirmation, titled with the Wonder's name, names the buildings that will be cleared, says how
+many displaced citizens you will be asked to place, and says the walls stay when the tile has any. Cancel and
+nothing happens.
 
 ![The confirmation before a tile is cleared](gallery/02-confirmation.jpg)
 
 *"Amphitheater and Academy will be cleared to build Buseoksa here. You will be asked where the 2 displaced
 citizens settle."*
 
-Confirm, and the tile is cleared and the Wonder queued there. Before the turn can end, the game's own Grow City
-prompt asks where each displaced citizen settles - a rural tile or a specialist seat, wherever you like.
+Confirm, and the buildings' demolition, the district's demolition and the Wonder's build order all go to the game
+in the same instant, so the tile goes straight from its old buildings to the Wonder's construction site and no
+empty ground is ever drawn. Walls come down with the district and are re-created on the Wonder's district a
+moment after it lands. Once the Wonder is standing, one citizen per building that housed one becomes pending
+population, and before the turn can end the game's own Grow City prompt asks where each settles - a rural tile
+or a specialist seat, wherever you like.
 
 ![The game's Grow City screen holding the displaced citizens](gallery/03-place-population.jpg)
 
@@ -66,10 +71,13 @@ That distinction is load-bearing. Measured in one city: of 48 Wonders, 2 were bu
 reasons that have nothing to do with any tile, and 4 were refused for want of a site. Only those last 4 are ones
 this mod can help with.
 
-The Wonder's own placement rules are then checked before a tile is offered for it: terrain, biome, feature,
-river, adjacent terrain, adjacent district, adjacent mountain, adjacent constructible, invalid adjacent biomes,
-homeland or distant lands, and a required constructible in the settlement - every placement rule the game's data
-holds for a Wonder. A rule the mod cannot evaluate excludes that Wonder rather than guessing, so the mod will
+The Wonder's own placement rules are then checked before a tile is offered for it: terrain, biome, no-feature,
+river (required or forbidden), adjacent terrain, adjacent district, adjacent mountain, adjacent constructible,
+invalid adjacent biomes, homeland or distant lands, and a required constructible in the settlement - every
+placement rule the game's data holds for a Wonder. A rule the mod does not evaluate excludes that Wonder rather
+than guessing: a Wonder that must stand on a feature, beside a lake, or on an appeal-chosen site is never
+offered an antiquated tile, and neither is one that uses a rule table no Wonder uses today (required or invalid
+features, feature classes, resources, river placement), should a future Wonder use one. So the mod will
 sometimes offer less than the game would allow and never more.
 
 The five Wonders that stand on Coast follow placement rules the game keeps to itself, so a coastal urban tile
@@ -81,10 +89,14 @@ bare coast tile of the same city.
 Civilization VII will not say whether a Wonder fits a tile until the tile is empty, and it enforces placement
 rules that are not in the data a mod can read. So a cleared tile can still be turned down.
 
-When that happens the mod puts the tile back: the buildings and the walls it destroyed are re-created, no citizens
-are displaced, and the build is never sent. Watched on a coastal Wonder whose every readable rule passed and which
-the engine still refused - the tile came back holding its Lighthouse, with population, urban and rural counts
-unchanged and nothing left pending. The cost of a refusal is a wasted confirmation, not a lost building.
+The build order goes to the game together with the clear, so a refusal shows up as the tile failing to become a
+Wonder site. The mod watches the tile for about three seconds; if the Wonder has not appeared by then, it puts
+the tile back: the buildings it destroyed are re-created, then the walls, and it reads the tile afterwards to
+confirm everything is standing. No citizens are displaced, because they are only added once the Wonder is on the
+tile. The hex is empty for those few seconds and then holds what it held before. Watched on a coastal Wonder
+whose every readable rule passed and which the engine still refused - the tile came back holding its Lighthouse,
+with population, urban and rural counts unchanged and nothing left pending. The cost of a refusal is a wasted
+confirmation, not a lost building.
 
 ## The yield preview
 
@@ -116,8 +128,9 @@ the Wonder from then on. The citizens are not lost: the head count is unchanged 
 
 ## Installation
 
-1. Subscribe on the Steam Workshop, or download the mod folder.
-2. Place the `build_wonders_over_antiquated_buildings` folder in the Civilization VII Mods directory.
+1. Subscribe on the Steam Workshop, or download the zip from the
+   [latest release](https://github.com/tmtmiller1/civilization-vii_build_wonders_over_antiquated_buildings/releases/latest).
+2. Unzip it so the `build-wonders-over-antiquated-buildings` folder sits in the Civilization VII Mods directory.
 3. Enable **Build Wonders Over Antiquated Buildings** from Additional Content in-game.
 
 ## Status
@@ -133,7 +146,7 @@ the run that proved it is in [docs/RECIPE.md](docs/RECIPE.md).
 
 ```
 build-wonders-over-antiquated-buildings.modinfo   one script, no data
-ui/bwab-clear-and-build.js          the mod: placement-screen hooks, the clear, the walls, the prompt
+ui/bwab-clear-and-build.js          the mod: placement-screen hooks, the clear, the walls, the yield preview, the rollback
 lib/bwab-eligibility.js             the antiquated-tile rule, engine-free, 23 tests
 text/en_us/ModText.xml              name, description, the confirmation text
 tests/eligibility.mjs               the rule's tests
@@ -150,8 +163,12 @@ install-dev.sh                      copies the mod into the game's Mods folder
 `eslint ui lib`, and the eligibility tests. Zero errors and zero warnings is the bar. `npm run readme:pdf` builds
 `README.pdf` from this file.
 
-The routes that were tried and set aside, the probes, and the harness runs are in
-[mod_ideas_tested/build_wonders_over_antiquated_buildings](../../mod_ideas_tested/build_wonders_over_antiquated_buildings/).
+In a running game, `globalThis.__bwab.enabled = false` makes every hook pass straight through, and
+`globalThis.__bwab.uninstall()` restores the engine's own methods; both are for troubleshooting.
+
+The routes that were tried and set aside, the probes, and the harness runs live in the author's working tree
+(`mod_ideas_tested/build_wonders_over_antiquated_buildings`), outside this repository; `devtools/README.md` lists
+the runs that verify this build.
 
 ## Credits
 
