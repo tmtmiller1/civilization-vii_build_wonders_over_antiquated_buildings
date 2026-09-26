@@ -36,7 +36,7 @@ from this folder (runs `pb6`, `pb7`, `pb8` on 1.5.0, 2026-09-24).
 ### Watched, on this folder's build
 
 - Both cases end as real Wonder districts: two antiquated buildings (`WONDER_BUSEOKSA`), and two plus ANCIENT
-  WALLS on a hill (`WONDER_EL_ESCORIAL`), the walls standing on the Wonder district afterwards.
+  WALLS on a hill (`WONDER_EL_ESCORIAL`), the walls standing on the Wonder district afterward.
 - Population is conserved: Leeds 26 -> 26 (urban 15 -> 13, rural 9 -> 11), Philadelphia 16 -> 16 (urban 6 -> 4,
   rural 10 -> 12), with the displaced points handed to the game's own Grow City screen
   (`INTERFACEMODE_ACQUIRE_TILE`) and `pendingPopulation` back to 0 once placed.
@@ -45,7 +45,7 @@ from this folder (runs `pb6`, `pb7`, `pb8` on 1.5.0, 2026-09-24).
   the engine and rolled back intact.
 - The Wonder placement screen holds the injected tile: `urbanPlots` contains it and `isPlotIndexSelectable()`
   answers true, with the "Place <Wonder>" panel rendering for it. The game plays its own Wonder completion
-  cinematic afterwards.
+  cinematic afterward.
 
 ### Fixed after watching it fail in the engine
 
@@ -64,13 +64,13 @@ from this folder (runs `pb6`, `pb7`, `pb8` on 1.5.0, 2026-09-24).
   now.
 
 - **Wonders that must sit next to a district are evaluated now instead of excluded.** `AdjacentDistrict`
-  (Grand Bazaar next to an urban district, for instance) is checked against the six neighbours' district types.
+  (Grand Bazaar next to an urban district, for instance) is checked against the six neighbors' district types.
   Only lake adjacency and appeal placement are still left unevaluated, and those Wonders are still not offered.
 
 ### Changed: the clear and the build happen in one tick
 
 - The three engine requests (each building's destroy, the district's destroy, the BUILD) are sent back to back
-  and the outcome is read afterwards, instead of waiting fixed timers between steps. Watched (`pb19` raw, `pb20`
+  and the outcome is read afterward, instead of waiting fixed timers between steps. Watched (`pb19` raw, `pb20`
   through the mod): the tile goes from its buildings straight to the Wonder's construction site 146 ms later and
   never reads bare at 50 ms sampling, so no empty hex is drawn; before, empty ground showed for about seven
   seconds. Citizens are added only once the Wonder is standing; a refusal still rolls the tile back, after a
@@ -85,7 +85,7 @@ from this folder (runs `pb6`, `pb7`, `pb8` on 1.5.0, 2026-09-24).
   of the same city. The five Coast Wonders' rules are in the engine alone: Nan Madol was refused on a cleared
   Coast tile that passed every table rule, accepted on no coast tile in eighteen cities, and its Civilopedia
   wording ("adjacent land must be an Island") is not the rule either -- eight tiles beside island land, none
-  accepted. The readable parts (adjacent to land, not a Lake, Distant Lands, no Tundra neighbour) are still
+  accepted. The readable parts (adjacent to land, not a Lake, Distant Lands, no Tundra neighbor) are still
   checked. Refusal side watched (`pb25`); a coast Wonder landing on a coastal urban tile is not.
 
 ### Added: a yield preview for the tiles the mod offers
@@ -97,4 +97,4 @@ from this folder (runs `pb6`, `pb7`, `pb8` on 1.5.0, 2026-09-24).
   the engine's own shape: the Wonder's base yields, minus the yields of each building that would go, plus the
   maintenance they would stop costing. The engine's own answer wins whenever it has one, so ordinary plots are
   untouched. Watched (`pb12`): the figure reads on the hex and in the panel. It is a first-order figure;
-  conditional Wonder yields and adjacency the old buildings were receiving are not modelled.
+  conditional Wonder yields and adjacency the old buildings were receiving are not modeled.

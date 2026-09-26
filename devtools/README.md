@@ -20,6 +20,7 @@ zsh run-harness.sh woobh-game-pb14.js AugustusExp66.Civ7Save pb14 900 full   # s
 zsh run-harness.sh woobh-game-pb15.js AugustusExp66.Civ7Save pb15 700 full   # rollback on refusal + the good case still builds
 zsh run-harness.sh woobh-game-pb19.js AugustusExp66.Civ7Save pb19 420 full   # raw engine: one-tick burst, 50 ms tile sampling
 zsh run-harness.sh woobh-game-pb20.js AugustusExp66.Civ7Save pb20 420 full   # the mod's one-tick clear on three tiles incl. a refusal
+zsh run-harness.sh woobh-game-pb26.js AugustusExp66.Civ7Save pb26 420 full   # a Wonder that REQUIRED an adjacent Urban district keeps its yields and quarter bonus after that district becomes a Wonder (Steam question)
 SHELL_SRC=woobh-shell-lan-new.js \
   zsh run-harness.sh woobh-game-pb18.js AugustusExp66.Civ7Save pb18 1200 full # a live LAN game, fresh Exploration start
 ```
@@ -28,7 +29,7 @@ SHELL_SRC=woobh-shell-lan-new.js \
 is, and then waits four minutes while you click it. Synthetic clicks are dropped on this machine
 without Accessibility permission, so a human click is the reliable route.
 
-Read `<label>-UI.log` afterwards: the `[BWAB]` lines are the mod, the `[WOOB]` lines are the probe. Screenshots
+Read `<label>-UI.log` afterward: the `[BWAB]` lines are the mod, the `[WOOB]` lines are the probe. Screenshots
 land in `harness/shots/`. `pb6` and `pb8` clear tiles, so run them on a save you do not mind; the runner never
 writes to the original save and puts the player's autosaves back.
 

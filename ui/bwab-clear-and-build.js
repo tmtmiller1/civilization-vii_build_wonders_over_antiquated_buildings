@@ -139,7 +139,7 @@ function readTile(plot) {
 
 /**
  * @param {Tile} tile
- * @returns {Array<{terrain:string, biome:string, district:string, types:string[]}>} The six neighbours.
+ * @returns {Array<{terrain:string, biome:string, district:string, types:string[]}>} The six neighbors.
  */
 function neighbours(tile) {
   const out = [];
@@ -202,7 +202,7 @@ function usesUnreadRules(def, t) {
  * A water tile for one of the five Coast Wonders. Their placement rules live in the engine, not in any table,
  * and the Civilopedia's wording is not the engine's rule either: Nan Madol's tooltip says "Coast adjacent to
  * land, this land must be an Island", yet eight coast tiles beside island land in one empire were accepted by
- * the engine on none (`pb24`), while every city centre there was off-island. So the gate is the engine's own
+ * the engine on none (`pb24`), while every city center there was off-island. So the gate is the engine's own
  * verdict: the Wonder must already be accepted on at least one bare coast tile of this city (its hidden rules
  * are then known to be satisfiable here), and this tile must pass the readable ones (adjacent to land, not a
  * Lake when `MustNotBeLake`). A refusal after that is still rolled back.
@@ -243,7 +243,7 @@ function fitsFlags(def, tile) {
 }
 
 /**
- * The Wonders-table rules that look at the six neighbours.
+ * The Wonders-table rules that look at the six neighbors.
  * @param {*} def @param {*} w The Wonders row. @param {Tile} tile @returns {boolean}
  */
 function fitsNeighbours(def, w, tile) {
@@ -256,7 +256,7 @@ function fitsNeighbours(def, w, tile) {
 }
 
 /**
- * Constructible_InvalidAdjacentBiomes: a neighbour in one of these biomes rules the tile out.
+ * Constructible_InvalidAdjacentBiomes: a neighbor in one of these biomes rules the tile out.
  * @param {*} def @param {Array<{biome:string}>} ns @returns {boolean}
  */
 function nextToInvalidBiome(def, ns) {

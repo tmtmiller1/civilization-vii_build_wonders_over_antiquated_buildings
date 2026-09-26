@@ -6,13 +6,13 @@ A block edited by hand is kept as-is. Delete a block to regenerate it from CHANG
 ==== 1.0.0 | 2026-09-24 | src efb7b489b61a | gen 829528c15db2 ====
 [b]Version 1.0.0 · 24 September 2026[/b]
 
-[b]First release.[/b] A city that filled its centre in Antiquity has nowhere left to put a Wonder. This mod lets you build one over the buildings that age left behind.
+[b]First release.[/b] A city that filled its center in Antiquity has nowhere left to put a Wonder. This mod lets you build one over the buildings that age left behind.
 • [b]Antiquated tiles become Wonder sites.[/b] Pick a Wonder in production and urban tiles whose buildings are all from an earlier age are offered on the placement screen alongside the usual ones, with a yield preview.
 • [b]The clear and the build land together.[/b] The old buildings go and the Wonder’s construction site appears in the same instant. No empty hex is ever drawn.
 • [b]The walls stay.[/b] They return on the Wonder’s district as soon as it lands.
 • [b]Your citizens are not lost.[/b] One citizen per building that housed one comes back as pending population, and the game’s own Grow City prompt asks where each settles.
 • [b]It decides where, never whether.[/b] A Wonder that is locked, not yet unlocked, or already standing somewhere in the world stays refused exactly as the game refuses it. Every placement rule in the game’s data is checked before a tile is offered.
 • [b]A refusal costs you nothing.[/b] If the game turns the cleared site down after all, the buildings and walls are put back within a few seconds and no citizens are displaced.
-• [b]No database change.[/b] One script. Wonders keep their class, uniqueness, cinematics, terrain rules and AI behaviour. A save loads with the mod on or off, and it can join a game in progress.
+• [b]No database change.[/b] One script. Wonders keep their class, uniqueness, cinematics, terrain rules and AI behavior. A save loads with the mod on or off, and it can join a game in progress.
 • [b]Multiplayer.[/b] Watched in a live LAN game.
 • English only for now; the text is two strings, so a translation is a small job. Ask for a language.

@@ -8,7 +8,7 @@
   City prompt so the player places them. The tile becomes a real Wonder district.
 
   No database change. Wonders keep their class, uniqueness, cinematics, terrain rules and AI
-  behaviour. One script. Every engine step was watched on 1.5.0; see docs/RECIPE.md.
+  behavior. One script. Every engine step was watched on 1.5.0; see docs/RECIPE.md.
 
   AffectsSavedGames=0: nothing is added to the database, so a save loads with the mod on or off,
   and a Wonder already built this way is ordinary constructible state.

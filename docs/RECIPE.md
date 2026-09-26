@@ -18,7 +18,7 @@ T2  plot 3912  ["BUILDING_BLACKSMITH","BUILDING_ACADEMY","BUILDING_ANCIENT_WALLS
 ```
 
 Real, stock, class-`WONDER` Wonders. Their uniqueness, their cinematics, their terrain rules, the adjacency bonus
-their neighbours read from `DISTRICT_WONDER`, and everything the AI does are untouched, because nothing about
+their neighbors read from `DISTRICT_WONDER`, and everything the AI does are untouched, because nothing about
 Wonders is touched. The mod clears the tile and lets the game build on it.
 
 ---
@@ -54,10 +54,10 @@ uses today, exclude that Wonder rather than guessing.
 Coast tile that satisfied every table rule (`pb14`); a survey of every coast tile in all eighteen cities (`pb22`)
 found the engine accepting it nowhere; and its Civilopedia wording ("Coast adjacent to land, this land must be an
 Island") is not the engine's rule either: eight coast tiles beside island land were accepted on none (`pb24`),
-while every city centre in that empire is off-island. So for a water tile the gate is empirical: the Wonder must
+while every city center in that empire is off-island. So for a water tile the gate is empirical: the Wonder must
 already be accepted by the engine on at least one bare coast tile of the same city -- proof its hidden rules can
 be met there -- and the tile must pass the readable ones (adjacent to land; not a Lake where `MustNotBeLake`;
-Distant Lands and no Tundra neighbour where the data says so). Watched (`pb25`): the Lighthouse tile is not
+Distant Lands and no Tundra neighbor where the data says so). Watched (`pb25`): the Lighthouse tile is not
 offered to Nan Madol, which the engine accepts nowhere, while the two land tiles still build. A coast Wonder
 actually landing on a coastal urban tile needs a game where the engine accepts it somewhere, and has not been.
 
@@ -155,7 +155,7 @@ maintenance they would stop costing. Watched (`pb12`): Gold -4, Happiness +1.66 
 and the panel both reading them.
 
 It is a first-order figure: yields a Wonder grants conditionally, and adjacency the old buildings were receiving,
-are not modelled. No Wonder in the game has adjacency rows of its own (0 of 48), which is why the Wonder side of it
+are not modeled. No Wonder in the game has adjacency rows of its own (0 of 48), which is why the Wonder side of it
 is exact.
 
 Two smaller things worth knowing, both probe-side rather than mod-side: the Wonder completion cinematic is modal

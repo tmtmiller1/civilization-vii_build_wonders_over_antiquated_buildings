@@ -9,7 +9,8 @@
     "lint": "eslint ui lib",
     "test": "node ./tests/eligibility.mjs",
     "readme:pdf": "bash scripts/build_readme_pdf.sh",
-    "verify": "tsc --noEmit && eslint ui lib && node ./tests/eligibility.mjs"
+    "verify": "tsc --noEmit && eslint ui lib && node ./tests/eligibility.mjs",
+    "release:gate": "npm run verify"
   },
   "devDependencies": {
     "eslint": "^9.0.0",
