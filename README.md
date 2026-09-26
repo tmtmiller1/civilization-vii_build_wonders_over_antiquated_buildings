@@ -1,6 +1,6 @@
 # Build Wonders Over Antiquated Buildings
 
-A Civilization VII mod. A city that filled its centre in Antiquity has nowhere left to put a Wonder. This mod
+A Civilization VII mod. A city that filled its center in Antiquity has nowhere left to put a Wonder. This mod
 lets you build one over the buildings that age left behind: urban tiles whose buildings are all from an earlier
 age are offered on the Wonder placement screen, the old buildings are cleared, the walls stay, and the citizens
 they housed are yours to place through the game's own Grow City prompt.
@@ -11,7 +11,7 @@ they housed are yours to place through the game's own Grow City prompt.
 `DISTRICT_WONDER`, and nothing about Wonders is redefined anywhere.*
 
 There is no database change. Wonders keep their class, their one-in-the-world uniqueness, their cinematics, their
-terrain rules, the adjacency their neighbours read from a Wonder district, and whatever the AI does with them. The
+terrain rules, the adjacency their neighbors read from a Wonder district, and whatever the AI does with them. The
 mod clears a tile and lets the game build on it, exactly as the game would build on any bare tile.
 
 ---
@@ -83,7 +83,7 @@ rules that are not in the data a mod can read. So a cleared tile can still be tu
 
 The build order goes to the game together with the clear, so a refusal shows up as the tile failing to become a
 Wonder site. The mod watches the tile for about three seconds; if the Wonder has not appeared by then, it puts
-the tile back: the buildings it destroyed are re-created, then the walls, and it reads the tile afterwards to
+the tile back: the buildings it destroyed are re-created, then the walls, and it reads the tile afterward to
 confirm everything is standing. No citizens are displaced, because they are only added once the Wonder is on the
 tile. The hex is empty for those few seconds and then holds what it held before. Watched on a coastal Wonder
 whose every readable rule passed and which the engine still refused - the tile came back holding its Lighthouse,
@@ -98,7 +98,7 @@ Wonder's base yields, minus the yields of the buildings that would go, plus the 
 costing.
 
 It is a first-order figure. Yields a Wonder grants conditionally, and adjacency the old buildings were receiving,
-are not modelled. No Wonder in the game has adjacency rows of its own, which is why the Wonder side of the
+are not modeled. No Wonder in the game has adjacency rows of its own, which is why the Wonder side of the
 subtraction is exact.
 
 ## What it costs you

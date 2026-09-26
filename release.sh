@@ -7,7 +7,7 @@
 #                                                                      the Workshop page, never sent by steamcmd)
 #         dist/workshop_item.vdf                                      (steamcmd manifest, no previewfile)
 #
-# What it does: run the quality gate (`npm run verify`), mirror the shipped files into dist/<folder>/, syntax-check
+# What it does: run the quality gate (`npm run release:gate`), mirror the shipped files into dist/<folder>/, syntax-check
 # the JS, zip with the modinfo at the zip root, audit the zip against an allow-list, render the preview, and write
 # the manifest. The change note comes from CHANGELOG.steam.txt (scripts/steam-changelog.mjs keeps it in step with
 # CHANGELOG.md). The Workshop description is included only for the FIRST upload (no steam_workshop_id.txt yet) or
@@ -37,8 +37,8 @@ grep -q "version: \"$VERSION\"" ui/bwab-clear-and-build.js \
 if [ "${SKIP_VERIFY:-0}" != "1" ]; then
     # This folder has no node_modules of its own; the dev tooling is shared with the Emigration mod.
     export PATH="$PWD/node_modules/.bin:$PWD/../emigration/node_modules/.bin:$PATH"
-    echo "==> Running verify gate (npm run verify; SKIP_VERIFY=1 to skip)"
-    npm run verify
+    echo "==> Running verify gate (npm run release:gate; SKIP_VERIFY=1 to skip)"
+    npm run release:gate
 fi
 
 # Steam publishedfileid, kept outside dist/ so it survives `rm -rf dist`. Absent until the first upload.

@@ -85,7 +85,7 @@ test("case D: an AGELESS building blocks the tile", () => {
   assert.deepEqual(v.blockers, ["BUILDING_PARTHENON"]);
 });
 
-test("case E: the city centre is refused as not-urban", () => {
+test("case E: the city center is refused as not-urban", () => {
   const v = evaluateTile({ districtType: "DISTRICT_CITY_CENTER", constructibles: [c()] }, AGE);
   assert.equal(v.eligible, false);
   assert.equal(v.reason, REASON.NOT_URBAN);
