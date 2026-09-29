@@ -13,7 +13,6 @@ A city that filled its center in Antiquity has nowhere left to put a Wonder. Thi
 [*][b]The Wonder's own rules still decide.[/b] Terrain, biome, river, no-feature, adjacent terrain, adjacent district, adjacent mountain, adjacent constructible, invalid adjacent biomes, homeland or distant lands, and a required constructible in the settlement are all checked before a tile is offered for a given Wonder. A rule the mod does not evaluate excludes that Wonder rather than guessing: one that must stand on a feature, beside a lake, or on an appeal-chosen site is never offered an antiquated tile. The five Coast Wonders are offered a coastal urban tile only when the game already accepts that Wonder on a bare coast tile of the same city. So the mod will sometimes offer less than it could and never more.
 [*][b]A refusal costs you nothing.[/b] The game will not say whether a Wonder fits a tile until the tile is empty, and it enforces rules no mod can read in advance. If it turns the cleared site down, the mod puts the buildings and walls back within a few seconds, no citizens are displaced (they are only added once the Wonder is standing), and nothing is lost.
 [*][b]A yield preview on the offered tile.[/b] The placement screen shows what the swap is worth: the Wonder's yields, less the yields of the buildings that would go, plus the maintenance they would stop costing.
-[*][b]No database change at all.[/b] One script, no data files, nothing added to the game's tables.
 [*][b]Readable, un-minified source.[/b]
 [/list]
 [h2]What the player does[/h2]
@@ -29,7 +28,7 @@ Start a Wonder in a city that has run out of open ground. On the placement scree
 The tile. Those buildings' yields and maintenance are gone, the city has fewer building slots, and the tile holds the Wonder from then on. The head count is unchanged once you have placed the displaced citizens.
 [h2]Compatibility[/h2]
 [list]
-[*][b]Save-safe both ways.[/b] Nothing is added to the database, so a save loads with the mod on or off, and it can join a game already in progress. A Wonder already built this way is ordinary constructible state.
+[*][b]Save-safe both ways.[/b] Nothing is added to the database, so a save loads with the mod on or off, and it can join a game already in progress.
 [*][b]No base-game files are replaced,[/b] and mods that adjust Wonder data are unaffected, because this mod does not touch Wonder data.
 [*][b]Your own city only.[/b] The clear and the build are the local player's actions on the local player's own settlement.
 [*][b]Multiplayer.[/b] Watched in a live LAN game: the clear, the build and the displaced citizens all went through the network session, and a competing placement was refused by the game and rolled back intact.
@@ -50,7 +49,9 @@ English only for now. The mod's text is two strings: ask for a language and I wi
 [/list]
 [h2]Source and documentation[/h2]
 [list]
-[*]Open source on GitHub: [url=https://github.com/tmtmiller1/civilization-vii_build_wonders_over_antiquated_buildings]source and full documentation[/url], and the [url=https://github.com/tmtmiller1/civilization-vii_build_wonders_over_antiquated_buildings/releases]release notes[/url].
+[*][b]What's new:[/b] [url=https://github.com/tmtmiller1/civilization-vii_build_wonders_over_antiquated_buildings/releases/latest]the latest release notes and a download[/url]
+[*][b]Full documentation:[/b] [url=https://github.com/tmtmiller1/civilization-vii_build_wonders_over_antiquated_buildings/blob/main/README.md]how the mod works[/url]
+[*][b]The same as a PDF:[/b] [url=https://github.com/tmtmiller1/civilization-vii_build_wonders_over_antiquated_buildings/blob/main/README.pdf]README.pdf, typeset with the screenshots[/url]
 [/list]
 [h2]For modders[/h2]
 This mod is developed with [url=https://github.com/tmtmiller1/civilizationvii_tower-bench]Tower Bench[/url], a free, open-source test bench for Civilization VII mods. It connects to a running game from your browser or the command line: inspect and change the map with every write verified and undoable, diff the world between two turns, prove your deployed code is what the game runs, find which mod causes a crash, and see which copy of each mod is actually loaded.
