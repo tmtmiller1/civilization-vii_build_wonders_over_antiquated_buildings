@@ -3,7 +3,7 @@ Generated from CHANGELOG.md by scripts/steam-changelog.mjs; release.sh uploads t
 To fix an old Workshop entry, paste the text under its ==== line into that entry's Edit box on the change-notes page.
 A block edited by hand is kept as-is. Delete a block to regenerate it from CHANGELOG.md.
 
-==== 1.0.0 | 2026-09-24 | src efb7b489b61a | gen 829528c15db2 ====
+==== 1.0.0 | 2026-09-24 | src fe3916dd5810 | gen 829528c15db2 ====
 [b]Version 1.0.0 · 24 September 2026[/b]
 
 [b]First release.[/b] A city that filled its center in Antiquity has nowhere left to put a Wonder. This mod lets you build one over the buildings that age left behind.
