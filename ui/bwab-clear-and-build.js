@@ -1,30 +1,28 @@
 // bwab-clear-and-build.js
 //
-// The mod. When the player places a Wonder, urban tiles whose buildings are all from an earlier
-// age are offered as sites. Choosing one clears the tile (its buildings, then its district; walls
-// are never destroyed), hands the displaced citizens to the game's own Grow City prompt, and then
-// builds the Wonder there through the game's own path. The tile becomes a real DISTRICT_WONDER and
-// nothing about Wonders changes: not their class, uniqueness, cinematics, or what the AI does.
+// When the player places a Wonder, urban tiles whose buildings are all from an earlier age are
+// offered as sites. Choosing one clears the tile (its buildings, then its district; walls are never
+// destroyed), builds the Wonder there through the game's own path, and once it stands hands the
+// displaced citizens to the game's own Grow City prompt. The tile becomes a real DISTRICT_WONDER and
+// nothing about Wonders changes.
 //
-// Every engine step was watched on 1.5.0 (docs/RECIPE.md):
+// The engine steps, each covered by a run in docs/RECIPE.md:
 //   DESTROY_ELEMENT {Kind:"CONSTRUCTIBLE"} per building, then {Kind:"DISTRICT"}  -> bare owned land
 //   a stock Wonder then builds on it                                              -> DISTRICT_WONDER
 //   city.addRuralPopulation(+1) per citizen  -> a pending point the Grow City prompt asks about
 //   walls go down with the district; CREATE_ELEMENT puts them back on the Wonder's district
 //
-// How it hooks the placement screen: the screen renders Game.CityOperations.canStart(BUILD). The
-// wrap appends eligible tiles to `Plots` for a WONDER, answers Success for the per-plot check the
-// commit path makes, and intercepts sendRequest(BUILD, {X, Y}) at one of those tiles to clear and
-// forward. There is no confirmation of its own: placing a Wonder on one of these tiles is the same
-// click as placing it on an empty tile.
+// The placement screen renders Game.CityOperations.canStart(BUILD). The wrap appends eligible tiles
+// to `Plots` for a WONDER, answers Success for the per-plot check the commit path makes, and
+// intercepts sendRequest(BUILD, {X, Y}) at one of those tiles to clear and forward. There is no
+// confirmation of its own: placing a Wonder on one of these tiles is the same click as placing it
+// on an empty tile.
 //
-// Which tiles: lib/bwab-eligibility.js (every occupant previous-age, none AGELESS; walls ignored
-// and kept). Which Wonders for a tile: the Wonder's own placement rules, evaluated here; a rule this
-// file cannot evaluate excludes the Wonder rather than guessing.
+// Which tiles: lib/bwab-eligibility.js. Which Wonders for a tile: the Wonder's own placement rules,
+// evaluated here; a rule this file cannot evaluate excludes the Wonder rather than guessing.
 //
-// Conventions: one globalThis key with a kill switch and an uninstall that restores the originals,
-// every engine call guarded, nothing thrown into an engine callback, warn-level logging, imports
-// under the mod id.
+// One globalThis key with a kill switch and an uninstall that restores the originals; every engine
+// call guarded; nothing thrown into an engine callback; imports under the mod id.
 
 import { evaluateTile } from "/tower-build-wonders-over-antiquated-buildings/lib/bwab-eligibility.js";
 
@@ -36,12 +34,12 @@ const SETTLE_MS = 2500;
 /** The production list calls canStart per item; the eligible-plot scan is cached this long. */
 const CACHE_MS = 1500;
 
-/** @param {string} m The line. */
+/** @param {string} m */
 function log(m) { try { console.warn(TAG + m); } catch (_) { /* logging must never throw */ } }
 /**
  * Run an engine read, returning a fallback on any throw.
  * @template T
- * @param {() => T} fn The read. @param {T} fb The fallback. @returns {T}
+ * @param {() => T} fn @param {T} fb @returns {T}
  */
 function safe(fn, fb) { try { return fn(); } catch (_) { return fb; } }
 /** @param {*} o @returns {string} */
@@ -68,7 +66,7 @@ function terrainAt(x, y) {
   return safe(() => String(GameInfo.Terrains.lookup(GameplayMap.getTerrainType(x, y)).TerrainType), "");
 }
 
-// --- reading a tile ------------------------------------------------------------------------------
+// reading a tile
 
 /**
  * @typedef {object} Occupant
@@ -80,7 +78,7 @@ function terrainAt(x, y) {
  * @property {{owner:number, id:number}} id For DESTROY_ELEMENT.
  */
 
-/** @param {*} inst A constructible instance. @returns {Occupant|null} */
+/** @param {*} inst @returns {Occupant|null} */
 function describeOccupant(inst) {
   const def = defOf(inst.type);
   if (!def) return null;
@@ -159,7 +157,7 @@ function neighbours(tile) {
   return out;
 }
 
-// --- does this Wonder fit this tile? ---------------------------------------------------------------
+// does this Wonder fit this tile?
 
 /** @param {string} table @param {string} type @param {string} col @returns {string[]} */
 function rowsFor(table, type, col) {
@@ -291,7 +289,7 @@ function wonderFitsTile(def, tile, city, cityID) {
   return fitsNeighbours(def, w, tile) && fitsSettlement(w, city);
 }
 
-// --- the injected plot set ---------------------------------------------------------------------
+// the injected plot set
 
 /** @type {Map<string, {at:number, plots:number[]}>} Keyed "cityKey|type". */
 const cache = new Map();
@@ -313,15 +311,15 @@ function engineCanStart(cityID, args) {
 /**
  * May this Wonder be offered here at all?
  *
- * This mod decides WHERE a Wonder may go, never WHETHER it may be built. The engine refuses a Wonder
- * for reasons that have nothing to do with the tile -- locked, not yet unlocked, already standing
- * somewhere in the world (`MaxWorldInstances`) -- and those refusals must stand. Watched (`pb11`) in one
- * city: 2 of 48 Wonders buildable, 42 refused with no stated reason, and 4 refused with exactly
+ * This mod decides where a Wonder may go, not whether it may be built. The engine refuses a Wonder
+ * for reasons that have nothing to do with the tile (locked, not yet unlocked, already standing
+ * somewhere in the world: `MaxWorldInstances`) and those refusals must stand. In one city (`pb11`):
+ * 2 of 48 Wonders buildable, 42 refused with no stated reason, and 4 refused with exactly
  * `LOC_BUILDING_CONSTRUCT_NO_SUITABLE_LOCATION`. Only that last refusal is about placement, so only it
  * is ours to answer.
  *
- * Getting this wrong is not cosmetic: `pb10` cleared a tile for a Wonder another civilization had already
- * built, and the city lost a building for a Wonder that could never be placed.
+ * Before this check, `pb10` cleared a tile for a Wonder another civilization had already built, and
+ * the city lost a building for a Wonder that could never be placed.
  * @param {*} cityID @param {*} def @returns {boolean}
  */
 function engineAllows(cityID, def) {
@@ -360,8 +358,8 @@ function eligiblePlotsFor(cityID, def) {
  *
  * The cached list is preferred, but a miss recomputes rather than answering no: the placement screen
  * always asks for the list before it commits a plot, but nothing guarantees that order, and answering
- * no to a tile we would have offered would refuse a build the player was allowed to make (watched:
- * `pb8` committed without listing first and was refused).
+ * no to a tile we would have offered would refuse a build the player was allowed to make (`pb8`
+ * committed without listing first and was refused).
  * @param {*} cityID @param {*} def @param {number} plot @returns {boolean}
  */
 function isInjected(cityID, def, plot) {
@@ -369,7 +367,7 @@ function isInjected(cityID, def, plot) {
   return hit ? hit.plots.includes(plot) : eligiblePlotsFor(cityID, def).includes(plot);
 }
 
-// --- the clear ------------------------------------------------------------------------------------
+// the clear
 
 /**
  * @typedef {object} Clear
@@ -391,12 +389,12 @@ const POLL_MS = 100;
 const POLL_MAX = 30;
 
 /**
- * The clear and the build, in ONE tick.
+ * The clear and the build, in one tick.
  *
- * Every building's destroy, the district's destroy and the BUILD go to the engine back to back. Watched
- * (`pb19`): the engine takes them in order within one tick and the tile reads DISTRICT_URBAN with its
- * buildings at one sample and DISTRICT_WONDER with the Wonder at the next -- the simulation never holds a
- * bare tile, so the screen never shows one. With fixed waits between the steps it showed empty ground for
+ * Every building's destroy, the district's destroy and the BUILD go to the engine back to back. The
+ * engine takes them in order within one tick (`pb19`): the tile reads DISTRICT_URBAN with its buildings
+ * at one sample and DISTRICT_WONDER with the Wonder at the next, so the simulation never holds a bare
+ * tile and the screen never shows one. With fixed waits between the steps it showed empty ground for
  * about seven seconds.
  *
  * The engine's own validation of the BUILD replaces the pre-check this used to make on the bare tile (it
@@ -520,13 +518,13 @@ function restoreWalls() {
   }
 }
 
-// --- the placement screen's price for a tile we added ---------------------------------------------
+// the placement screen's price for a tile we added
 
 /**
  * The engine prices a Wonder per plot in `city.Yields.calculateAllBuildingsPlacements()`, and only for
  * the plots it would itself offer. A tile this mod adds is therefore absent, so the placement screen's
  * yield lookups for it logged an error and returned nothing: no yields on the hex, no breakdown in the
- * panel, and the tile could never be one of the screen's recommendations (watched: `pb6`, `pb7`).
+ * panel, and the tile could never be one of the screen's recommendations (`pb6`, `pb7`).
  *
  * This builds the missing entry from the engine's own per-constructible numbers, in the same shape the
  * engine's own entries have (`{plotID, yieldChanges, changeDetails, overbuiltConstructibleID}`):
@@ -599,7 +597,7 @@ async function hookPlacementScreen() {
   }
 }
 
-// --- the hooks ----------------------------------------------------------------------------------
+// the hooks
 
 /** @type {{enabled:boolean, originals:{canStart:*, sendRequest:*}|null}} */
 const state = { enabled: true, originals: null };

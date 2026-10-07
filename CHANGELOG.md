@@ -6,18 +6,18 @@ versioning. The history of the routes that were tried before this design, and th
 
 ## [1.0.0] - 2026-09-24
 
-The shipped design, moved into `tower_mods/` on its own, brought to the repo's code standard, and watched working
-from this folder (runs `pb6`, `pb7`, `pb8` on 1.5.0, 2026-09-24).
+The shipped design, moved into `tower_mods/` on its own and brought to the repo's code standard. Runs `pb6`, `pb7`
+and `pb8` (1.5.0, 2026-09-24) cover the build from this folder.
 
 - Renamed from "Wonders Over Outdated Buildings" (mod id `tower-wonders-over-outdated-buildings`, script prefix
   `woob`) to "Build Wonders Over Antiquated Buildings" (`tower-build-wonders-over-antiquated-buildings`, `bwab`).
-  The rename changed the script's import path, so the end-to-end run has to be repeated from this folder.
+  The rename changed the script's import path, so the end-to-end run was repeated from this folder.
 - One script, `ui/bwab-clear-and-build.js`: hooks the Wonder placement screen so urban tiles whose buildings are
   all antiquated are offered; choosing one clears the tile (buildings only; walls are never destroyed by the mod
   and are re-created on the Wonder's district), queues the stock Wonder there through the game's own path, and
-  hands the displaced citizens to the game's Grow City prompt. Watched end to end on two tiles, one with walls
-  (run `pb5`, under the old name): both became real `DISTRICT_WONDER` tiles, population unchanged once placed,
-  walls preserved.
+  hands the displaced citizens to the game's Grow City prompt. Run `pb5`, under the old name, took two tiles
+  through it, one with walls: both became real `DISTRICT_WONDER` tiles, population unchanged once placed, walls
+  preserved.
 - Placing a Wonder on an antiquated tile is one click, the same as placing it on an empty tile: the mod raises no
   confirmation of its own.
 - A kill switch (`globalThis.__bwab.enabled = false`) and an `uninstall()` that restores the engine's own
@@ -33,7 +33,7 @@ from this folder (runs `pb6`, `pb7`, `pb8` on 1.5.0, 2026-09-24).
   without one was refused (`pb8`). The placement screen always lists first, so this never showed in play, but
   nothing guarantees that order. `isInjected` now recomputes on a cache miss.
 
-### Watched, on this folder's build
+### On this folder's build
 
 - Both cases end as real Wonder districts: two antiquated buildings (`WONDER_BUSEOKSA`), and two plus ANCIENT
   WALLS on a hill (`WONDER_EL_ESCORIAL`), the walls standing on the Wonder district afterward.
@@ -47,31 +47,31 @@ from this folder (runs `pb6`, `pb7`, `pb8` on 1.5.0, 2026-09-24).
   answers true, with the "Place <Wonder>" panel rendering for it. The game plays its own Wonder completion
   cinematic afterward.
 
-### Fixed after watching it fail in the engine
+### Fixed against the engine
 
-- **The mod used to override the engine's refusal of a Wonder.** Its `canStart` wrap answered Success whenever it
+- The mod used to override the engine's refusal of a Wonder. Its `canStart` wrap answered Success whenever it
   added plots, so a Wonder that was locked, not yet unlocked, or already standing somewhere in the world was still
-  offered. Watched (`pb10`): a tile was cleared for a Wonder another civilization had already built, and the city
-  lost a building for a Wonder that could never be placed. The wrap now asks the engine first and only answers for
-  a refusal that is actually about placement (`LOC_BUILDING_CONSTRUCT_NO_SUITABLE_LOCATION`); every other refusal
-  stands. Measured in one city: 2 of 48 Wonders buildable, 42 refused for non-placement reasons, 4 for want of a
-  site.
-- **A refusal after clearing no longer costs anything.** The engine will not answer about a tile until it is empty,
-  and it enforces rules this file cannot read, so a clear can still be followed by a refusal (watched: `pb14`, a
-  coastal Wonder on a cleared coastal tile). The mod now asks the engine before adding any citizens and, if the
-  answer is no, re-creates the buildings and walls it destroyed.
-- **The post-clear check asked the mod's own wrap**, which always agreed with itself. It asks the engine directly
+  offered. In `pb10` a tile was cleared for a Wonder another civilization had already built, and the city lost a
+  building for a Wonder that could never be placed. The wrap now asks the engine first and only answers for a
+  refusal that is actually about placement (`LOC_BUILDING_CONSTRUCT_NO_SUITABLE_LOCATION`); every other refusal
+  stands. In one city that came to 2 of 48 Wonders buildable, 42 refused for non-placement reasons, 4 for want of
+  a site.
+- A refusal after clearing no longer costs anything. The engine will not answer about a tile until it is empty,
+  and it enforces rules this file cannot read, so a clear can still be followed by a refusal (`pb14`: a coastal
+  Wonder on a cleared coastal tile). The mod now asks the engine before adding any citizens and, if the answer is
+  no, re-creates the buildings and walls it destroyed.
+- The post-clear check asked the mod's own wrap, which always agreed with itself. It asks the engine directly
   now.
 
-- **Wonders that must sit next to a district are evaluated now instead of excluded.** `AdjacentDistrict`
-  (Grand Bazaar next to an urban district, for instance) is checked against the six neighbors' district types.
-  Only lake adjacency and appeal placement are still left unevaluated, and those Wonders are still not offered.
+- Wonders that must sit next to a district are evaluated now instead of excluded. `AdjacentDistrict` (Grand
+  Bazaar next to an urban district, for instance) is checked against the six neighbors' district types. Only lake
+  adjacency and appeal placement are still left unevaluated, and those Wonders are still not offered.
 
 ### Changed: the clear and the build happen in one tick
 
 - The three engine requests (each building's destroy, the district's destroy, the BUILD) are sent back to back
-  and the outcome is read afterward, instead of waiting fixed timers between steps. Watched (`pb19` raw, `pb20`
-  through the mod): the tile goes from its buildings straight to the Wonder's construction site 146 ms later and
+  and the outcome is read afterward, instead of waiting fixed timers between steps. In `pb19` (raw) and `pb20`
+  (through the mod) the tile goes from its buildings straight to the Wonder's construction site 146 ms later and
   never reads bare at 50 ms sampling, so no empty hex is drawn; before, empty ground showed for about seven
   seconds. Citizens are added only once the Wonder is standing; a refusal still rolls the tile back, after a
   three-second grace period during which the hex is empty.
@@ -84,9 +84,10 @@ from this folder (runs `pb6`, `pb7`, `pb8` on 1.5.0, 2026-09-24).
 - A water tile is offered to a Coast Wonder only when the engine already accepts that Wonder on a bare coast tile
   of the same city. The five Coast Wonders' rules are in the engine alone: Nan Madol was refused on a cleared
   Coast tile that passed every table rule, accepted on no coast tile in eighteen cities, and its Civilopedia
-  wording ("adjacent land must be an Island") is not the rule either -- eight tiles beside island land, none
+  wording ("adjacent land must be an Island") is not the rule either: eight tiles beside island land, none
   accepted. The readable parts (adjacent to land, not a Lake, Distant Lands, no Tundra neighbor) are still
-  checked. Refusal side watched (`pb25`); a coast Wonder landing on a coastal urban tile is not.
+  checked. The refusal side is covered by `pb25`; a coast Wonder landing on a coastal urban tile has not come up
+  yet.
 
 ### Added: a yield preview for the tiles the mod offers
 
@@ -96,5 +97,5 @@ from this folder (runs `pb6`, `pb7`, `pb8` on 1.5.0, 2026-09-24).
   recommendations. The mod now answers the placement manager's per-plot lookup for its own tiles with an entry in
   the engine's own shape: the Wonder's base yields, minus the yields of each building that would go, plus the
   maintenance they would stop costing. The engine's own answer wins whenever it has one, so ordinary plots are
-  untouched. Watched (`pb12`): the figure reads on the hex and in the panel. It is a first-order figure;
-  conditional Wonder yields and adjacency the old buildings were receiving are not modeled.
+  untouched. The figure reads on the hex and in the panel (`pb12`). It is a first-order figure; conditional
+  Wonder yields and adjacency the old buildings were receiving are not modeled.

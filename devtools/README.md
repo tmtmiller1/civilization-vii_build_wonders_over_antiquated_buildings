@@ -14,13 +14,13 @@ zsh run-harness.sh woobh-game-pb7.js  AugustusExp66.Civ7Save pb7  420 full   # t
 zsh run-harness.sh woobh-game-pb8.js  AugustusExp66.Civ7Save pb8  600 full   # Grow City screen + the finished tiles
 zsh run-harness.sh woobh-game-pb8.js  AugustusExp66.Civ7Save pb8-nodialog 600 full   # the same run with no prompt of the mod's own (1.0.0)
 zsh run-harness.sh woobh-game-pb9.js  AugustusExp66.Civ7Save pb9  420 full   # read-only survey: case B tiles, yield APIs, screen positions
-zsh run-harness.sh woobh-game-pb11.js AugustusExp66.Civ7Save pb11 420 full   # read-only: the ENGINE's verdict on all 48 Wonders
+zsh run-harness.sh woobh-game-pb11.js AugustusExp66.Civ7Save pb11 420 full   # read-only: the engine's verdict on all 48 Wonders
 zsh run-harness.sh woobh-game-pb12.js AugustusExp66.Civ7Save pb12 700 full   # the yield preview on an injected tile
-zsh run-harness.sh woobh-game-pb14.js AugustusExp66.Civ7Save pb14 900 full   # sets the board up and waits for a HUMAN click
+zsh run-harness.sh woobh-game-pb14.js AugustusExp66.Civ7Save pb14 900 full   # sets the board up and waits for a human click
 zsh run-harness.sh woobh-game-pb15.js AugustusExp66.Civ7Save pb15 700 full   # rollback on refusal + the good case still builds
 zsh run-harness.sh woobh-game-pb19.js AugustusExp66.Civ7Save pb19 420 full   # raw engine: one-tick burst, 50 ms tile sampling
 zsh run-harness.sh woobh-game-pb20.js AugustusExp66.Civ7Save pb20 420 full   # the mod's one-tick clear on three tiles incl. a refusal
-zsh run-harness.sh woobh-game-pb26.js AugustusExp66.Civ7Save pb26 420 full   # a Wonder that REQUIRED an adjacent Urban district keeps its yields and quarter bonus after that district becomes a Wonder (Steam question)
+zsh run-harness.sh woobh-game-pb26.js AugustusExp66.Civ7Save pb26 420 full   # a Wonder that required an adjacent Urban district keeps its yields and quarter bonus after that district becomes a Wonder (Steam question)
 SHELL_SRC=woobh-shell-lan-new.js \
   zsh run-harness.sh woobh-game-pb18.js AugustusExp66.Civ7Save pb18 1200 full # a live LAN game, fresh Exploration start
 ```

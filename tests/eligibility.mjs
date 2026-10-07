@@ -1,11 +1,11 @@
 // Offline tests for lib/bwab-eligibility.js.
 //
-// The module is deliberately engine-free, so these run under plain node with no loader and no
-// stubs: `npm test` from the mod root.
+// The module is engine-free, so these run under plain node with no loader and no stubs: `npm test`
+// from the mod root.
 //
-// What these DO prove: the rule refuses every case it should, in the order it should, and names
-// the right blockers. What they do NOT prove: that the engine behaves as DESIGN.md 7b assumes.
-// No test in this file touches the game.
+// They cover the rule itself: it refuses every case it should, in the order it should, and names
+// the right blockers. Nothing here touches the game; how the engine behaves on a cleared tile is
+// docs/RECIPE.md's business.
 
 import assert from "node:assert/strict";
 import { evaluateTile, eligibleTiles, isOutdated, describeVerdict, REASON } from "../lib/bwab-eligibility.js";
@@ -27,10 +27,9 @@ const urban = (...list) => ({ districtType: "DISTRICT_URBAN", constructibles: li
 
 let passed = 0;
 const cases = [];
-/** Register a named check. */
 const test = (name, fn) => cases.push([name, fn]);
 
-// --- isOutdated ------------------------------------------------------------------------------
+// isOutdated
 
 test("a previous-age, non-ageless building is outdated", () => {
   assert.equal(isOutdated(c(), AGE), true);
@@ -55,7 +54,7 @@ test("isOutdated tolerates a missing constructible", () => {
   assert.equal(isOutdated(undefined, AGE), false);
 });
 
-// --- the four player-facing cases from DESIGN.md 1 --------------------------------------------
+// the player-facing cases from DESIGN.md 1
 
 test("case A: two outdated buildings is eligible, both listed for destruction", () => {
   const v = evaluateTile(urban(c({ type: "BUILDING_LIBRARY" }), c({ type: "BUILDING_BATH" })), AGE);
@@ -91,7 +90,7 @@ test("case E: the city center is refused as not-urban", () => {
   assert.equal(v.reason, REASON.NOT_URBAN);
 });
 
-// --- the district gate ------------------------------------------------------------------------
+// the district gate
 
 test("rural, wilderness, wonder and district-less plots are all refused", () => {
   for (const d of ["DISTRICT_RURAL", "DISTRICT_WILDERNESS", "DISTRICT_WONDER", ""]) {
@@ -106,14 +105,14 @@ test("a missing tile is refused rather than throwing", () => {
   assert.equal(evaluateTile(undefined, AGE).reason, REASON.NOT_URBAN);
 });
 
-// --- emptiness ---------------------------------------------------------------------------------
+// emptiness
 
 test("an empty urban district is refused", () => {
   assert.equal(evaluateTile(urban(), AGE).reason, REASON.EMPTY);
   assert.equal(evaluateTile({ districtType: "DISTRICT_URBAN", constructibles: null }, AGE).reason, REASON.EMPTY);
 });
 
-// --- walls --------------------------------------------------------------------------------------
+// walls
 
 test("a wall neither blocks nor counts: the tile is eligible, the wall is listed to be kept", () => {
   const v = evaluateTile(
@@ -148,7 +147,7 @@ test("the three tile shapes the design names: one outdated yes, several outdated
   assert.equal(evaluateTile(urban(c({ type: "A", age: AGE }), c({ type: "B", age: AGE })), AGE).eligible, false);
 });
 
-// --- malformed input ------------------------------------------------------------------------------
+// malformed input
 
 test("a constructible with no age blocks rather than being assumed outdated", () => {
   const v = evaluateTile(urban(c({ type: "BUILDING_MYSTERY", age: null })), AGE);
@@ -163,7 +162,7 @@ test("a junk entry blocks rather than being skipped", () => {
   assert.equal(v.reason, REASON.UNKNOWN_AGE);
 });
 
-// --- notes ----------------------------------------------------------------------------------------
+// notes
 
 test("a damaged outdated building is still eligible but is called out", () => {
   const v = evaluateTile(urban(c({ type: "BUILDING_BATH", damaged: true })), AGE);
@@ -172,7 +171,7 @@ test("a damaged outdated building is still eligible but is called out", () => {
   assert.match(v.notes[0], /BUILDING_BATH is damaged/);
 });
 
-// --- collection + description ---------------------------------------------------------------------
+// collection + description
 
 test("eligibleTiles keeps only the eligible plots and carries the plot index", () => {
   const out = eligibleTiles(
@@ -202,7 +201,7 @@ test("describeVerdict names what would be destroyed, what is kept, and why not w
   assert.match(describeVerdict(9, null), /no verdict/);
 });
 
-// --- run -------------------------------------------------------------------------------------------
+// run
 
 let failed = 0;
 for (const [name, fn] of cases) {

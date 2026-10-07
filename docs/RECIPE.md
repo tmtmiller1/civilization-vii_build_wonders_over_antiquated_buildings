@@ -1,6 +1,6 @@
-# The shipped design, and the runs that proved it
+# The shipped design and the runs behind it
 
-**Build Wonders Over Antiquated Buildings works, end to end, with no data change at all.** Watched on 1.5.0,
+Build Wonders Over Antiquated Buildings works end to end with no data change at all. The runs on 1.5.0,
 2026-09-24: `pb5` under the mod's old name, then `pb6`, `pb7` and `pb8` against this folder after the rename.
 `pb6` drove it through the mod's own hooks exactly as a player's click drives them, through the confirmation
 the mod had at the time (removed since: placing is one click now, `pb8-nodialog`); `pb7` read and photographed
@@ -36,32 +36,32 @@ specialist seat, wherever you like) before the turn can end.
 |---|---|
 | one antiquated building, free slot or not | yes |
 | two (or more) antiquated buildings | yes |
-| one antiquated beside one current-age | **no** |
-| two current-age | **no** |
-| anything Ageless (Palace, City Hall, Harbor, unique-quarter buildings, Wonders) | **no** |
+| one antiquated beside one current-age | no |
+| two current-age | no |
+| anything Ageless (Palace, City Hall, Harbor, unique-quarter buildings, Wonders) | no |
 | walls, alongside any of the above | walls neither block nor count; they are kept |
 
-Antiquated = previous age and not `AGELESS`. The engine itself enforces none of this (watched: it offers every
+Antiquated = previous age and not `AGELESS`. The engine itself enforces none of this (it offers every
 terrain-valid urban tile whatever stands on it), so this rule is the only thing that decides what is ever cleared.
 
 The Wonder's own placement rules are checked in script before a tile is offered for it: terrain, biome, feature,
 river, adjacent terrain, adjacent district, adjacent mountain, adjacent constructible, invalid adjacent biomes,
-homeland or distant lands, and the required constructible in the settlement -- every placement rule the database
-holds for a Wonder. The two it does not evaluate (lake adjacency, appeal placement), and any rule table no Wonder
-uses today, exclude that Wonder rather than guessing.
+homeland or distant lands, and the required constructible in the settlement, which is every placement rule the
+database holds for a Wonder. The two it does not evaluate (lake adjacency, appeal placement), and any rule table
+no Wonder uses today, exclude that Wonder rather than guessing.
 
-**The coast Wonders' rules are the engine's alone, and the engine is asked.** Nan Madol was refused on a cleared
-Coast tile that satisfied every table rule (`pb14`); a survey of every coast tile in all eighteen cities (`pb22`)
-found the engine accepting it nowhere; and its Civilopedia wording ("Coast adjacent to land, this land must be an
+The coast Wonders' rules are the engine's alone, so the engine is asked. Nan Madol was refused on a cleared Coast
+tile that satisfied every table rule (`pb14`); a survey of every coast tile in all eighteen cities (`pb22`) found
+the engine accepting it nowhere; and its Civilopedia wording ("Coast adjacent to land, this land must be an
 Island") is not the engine's rule either: eight coast tiles beside island land were accepted on none (`pb24`),
-while every city center in that empire is off-island. So for a water tile the gate is empirical: the Wonder must
-already be accepted by the engine on at least one bare coast tile of the same city -- proof its hidden rules can
-be met there -- and the tile must pass the readable ones (adjacent to land; not a Lake where `MustNotBeLake`;
-Distant Lands and no Tundra neighbor where the data says so). Watched (`pb25`): the Lighthouse tile is not
-offered to Nan Madol, which the engine accepts nowhere, while the two land tiles still build. A coast Wonder
-actually landing on a coastal urban tile needs a game where the engine accepts it somewhere, and has not been.
+while every city center in that empire is off-island. So for a water tile the gate is empirical. The Wonder must
+already be accepted by the engine on at least one bare coast tile of the same city, which shows its hidden rules
+can be met there, and the tile must pass the readable ones (adjacent to land; not a Lake where `MustNotBeLake`;
+Distant Lands and no Tundra neighbor where the data says so). In `pb25` the Lighthouse tile is not offered to Nan
+Madol, which the engine accepts nowhere, while the two land tiles still build. A coast Wonder actually landing on
+a coastal urban tile needs a game where the engine accepts it somewhere, and no run has had one.
 
-## How it works: every step watched
+## How it works, step by step
 
 | Step | Call | Run |
 |---|---|---|
@@ -111,31 +111,31 @@ allowed to make. `isInjected` now recomputes on a cache miss instead of answerin
 
 ## What the mod may and may not decide
 
-This mod decides **where** a Wonder may go. It never decides **whether** one may be built. The engine refuses a
-Wonder for reasons that have nothing to do with any tile -- locked, not yet unlocked, already standing somewhere in
-the world -- and those refusals are left alone. Measured in one city (`pb11`): 2 of 48 Wonders buildable, 42
-refused with no stated reason, and 4 refused with exactly `LOC_BUILDING_CONSTRUCT_NO_SUITABLE_LOCATION`. Only that
-last refusal means "nowhere to put it", and only it is this mod's business.
+This mod decides *where* a Wonder may go, not *whether* one may be built. The engine refuses a Wonder for reasons
+that have nothing to do with any tile (locked, not yet unlocked, already standing somewhere in the world), and
+those refusals are left alone. In one city (`pb11`): 2 of 48 Wonders buildable, 42 refused with no stated reason,
+and 4 refused with exactly `LOC_BUILDING_CONSTRUCT_NO_SUITABLE_LOCATION`. Only that last refusal means "nowhere to
+put it", and only it is this mod's business.
 
-That distinction is not academic: before it existed, a tile was cleared for a Wonder another civilization had
-already built, and the city lost a building for a Wonder that could never be placed (`pb10`).
+Before that distinction existed, a tile was cleared for a Wonder another civilization had already built, and the
+city lost a building for a Wonder that could never be placed (`pb10`).
 
 ## The clear is reversible, because the engine cannot be asked in advance
 
 The engine will not say whether a Wonder fits a tile until the tile is empty, and it enforces rules that are not in
-the database tables a mod can read. Watched (`pb14`): every readable rule passed -- the tile really was
-`TERRAIN_COAST`, which is the only terrain `WONDER_NAN_MADOL` accepts -- and the engine still refused the cleared
-plot. A player's Lighthouse went with it.
+the database tables a mod can read. In `pb14` every readable rule passed (the tile really was `TERRAIN_COAST`,
+the only terrain `WONDER_NAN_MADOL` accepts) and the engine still refused the cleared plot. A player's Lighthouse
+went with it.
 
 So the clear is judged after the fact: every destroy and the BUILD go to the engine in one tick, the mod then
 reads the tile, and only if the Wonder is standing are the displaced citizens added. If the engine refused the
-Wonder, the mod re-creates the buildings and walls it destroyed. Watched (`pb15`, `pb20`): the tile came back as
+Wonder, the mod re-creates the buildings and walls it destroyed. In `pb15` and `pb20` the tile came back as
 `DISTRICT_URBAN` holding its Lighthouse, with population, urban and rural counts unchanged and nothing pending.
 
 ## Nothing bare is ever drawn
 
-The three requests -- each building's destroy, the district's destroy, the BUILD -- are sent back to back in one
-tick. Watched raw (`pb19`) and through the mod's own path (`pb20`), sampling the tile every 50 ms: it reads
+The three requests (each building's destroy, the district's destroy, the BUILD) are sent back to back in one
+tick. Raw (`pb19`) and through the mod's own path (`pb20`), sampling the tile every 50 ms, it reads
 `DISTRICT_URBAN` with its buildings at one sample and `DISTRICT_WONDER` with the Wonder at the next (146 ms after
 the request), and no sample ever reads a bare tile. The simulation never holds an empty hex, so the screen never
 shows one; the buildings are replaced by the Wonder's construction site directly. With the earlier fixed waits
@@ -143,7 +143,7 @@ between the steps, empty ground was on screen for about seven seconds.
 
 The one time bare ground would be drawn is a refusal: the mod learns the engine said no only by the Wonder's
 absence, so it waits three seconds before restoring the tile (`pb20`, 75 ms to 3.6 s). With water tiles no longer
-offered, no refusal has been observed; the rollback stays as the backstop for a rule nobody has met yet.
+offered, no refusal has come up; the rollback stays as the backstop for a rule nobody has met yet.
 
 ## The yield preview
 
@@ -151,8 +151,8 @@ A plot the mod injects has no `PlacementPlotData` of its own, because the engine
 it would have offered, so the placement screen used to show no yields for our tile and log an error (`pb6`, `pb7`).
 The mod now answers `getPlacementPlotData` for its own plots, building the entry from the engine's own
 per-constructible numbers: the Wonder's base yields, minus the yields of the buildings that would go, plus the
-maintenance they would stop costing. Watched (`pb12`): Gold -4, Happiness +1.66 on a Lighthouse tile, with the hex
-and the panel both reading them.
+maintenance they would stop costing. In `pb12` that read Gold -4, Happiness +1.66 on a Lighthouse tile, with the
+hex and the panel both showing it.
 
 It is a first-order figure: yields a Wonder grants conditionally, and adjacency the old buildings were receiving,
 are not modeled. No Wonder in the game has adjacency rows of its own (0 of 48), which is why the Wonder side of it
@@ -163,24 +163,22 @@ and blocks camera work until `.cinematic-moment__close-button` is pressed, and `
 interface mode asynchronously, so a `switchTo` issued in the same tick is clobbered (that is what made `pb6`
 report the placement screen as empty; `pb7`, with a wait between them, read it correctly).
 
-## What is still not watched
+## What is still open
 
-Case B, the player's own click, a refusal costing nothing and a live LAN game are all watched now (`pb14`, `pb15`,
-`pb18`).
-What is left:
+Case B, the player's own click, a refusal costing nothing and a live LAN game are all covered (`pb14`, `pb15`,
+`pb18`). What is left:
 
-- **Two people placing at once.** In `pb18` the probe and the player each committed Grand Bazaar within six
-  seconds; the engine took the first and refused the second, and the rollback restored the second tile. The mod
-  behaved. (It had a confirmation of its own at the time, which a probe flag had skipped; both are gone now.)
-- **A coast Wonder actually landing on a coastal urban tile.** The gate needs the engine to accept that Wonder
-  on some bare coast tile of the city first; no save to hand has one.
-- **Whether any tile is ever refused now.** If one is, the cost is the three-second empty hex, not a lost
-  building.
+- Two people placing at once. In `pb18` the probe and the player each committed Grand Bazaar within six seconds;
+  the engine took the first and refused the second, and the rollback restored the second tile. The mod behaved.
+  (It had a confirmation of its own at the time, which a probe flag had skipped; both are gone now.)
+- A coast Wonder actually landing on a coastal urban tile. The gate needs the engine to accept that Wonder on
+  some bare coast tile of the city first; no save to hand has one.
+- Whether any tile is ever refused now. If one is, the cost is the three-second empty hex, not a lost building.
 
 ## The two designs this replaced
 
 Kept in `mod_ideas_tested/build_wonders_over_antiquated_buildings/archive/convert-wonders/` with their findings.
-Route A (give a WONDER an urban placement row): watched, the Wonder is *added* beside the old buildings, never
-built over them. Route E (convert Wonders to `FULL_TILE` buildings): watched working, but Wonders stop being unique
-and the AI builds dozens. Both were the engine telling us the same thing from two sides: overbuild is a
-building-class mechanic, and a Wonder has to be placed on bare land.
+Route A (give a WONDER an urban placement row): the Wonder is *added* beside the old buildings, never built over
+them. Route E (convert Wonders to `FULL_TILE` buildings): works, but Wonders stop being unique and the AI builds
+dozens. Both were the engine telling us the same thing from two sides: overbuild is a building-class mechanic, and
+a Wonder has to be placed on bare land.

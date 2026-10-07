@@ -10,7 +10,7 @@
 # What it does: run the quality gate (`npm run release:gate`), mirror the shipped files into dist/<folder>/, syntax-check
 # the JS, zip with the modinfo at the zip root, audit the zip against an allow-list, render the preview, and write
 # the manifest. The change note comes from CHANGELOG.steam.txt (scripts/steam-changelog.mjs keeps it in step with
-# CHANGELOG.md). The Workshop description is included only for the FIRST upload (no steam_workshop_id.txt yet) or
+# CHANGELOG.md). The Workshop description is included only for the first upload (no steam_workshop_id.txt yet) or
 # when WITH_DESCRIPTION=1: steamcmd only touches the fields present, so leaving it out keeps the live page text.
 
 set -euo pipefail
@@ -35,7 +35,7 @@ grep -q "version: \"$VERSION\"" ui/bwab-clear-and-build.js \
     || { echo "error: ui/bwab-clear-and-build.js does not carry version \"$VERSION\"."; exit 1; }
 
 if [ "${SKIP_VERIFY:-0}" != "1" ]; then
-    # This folder has no node_modules of its own; the dev tooling is shared with the Emigration mod.
+    # The dev tooling is this folder's own node_modules, with the Emigration mod's as a fallback.
     export PATH="$PWD/node_modules/.bin:$PWD/../emigration/node_modules/.bin:$PATH"
     echo "==> Running verify gate (npm run release:gate; SKIP_VERIFY=1 to skip)"
     npm run release:gate
@@ -83,7 +83,7 @@ fi
 echo "    OK: every shipped entry matches the allow-list."
 unzip -l "$ZIP_PATH" | head -25 || true
 
-# ── Steam Workshop preview + manifest ─────────────────────────────────────
+# Steam Workshop preview + manifest
 PREVIEW_OUT="$DIST_DIR/preview.png"
 if command -v rsvg-convert >/dev/null 2>&1 && [ -f docs/logo.svg ]; then
     rsvg-convert -w 1024 -h 1024 docs/logo.svg -o "$PREVIEW_OUT"

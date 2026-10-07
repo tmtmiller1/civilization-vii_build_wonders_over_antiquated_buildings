@@ -30,7 +30,7 @@ demolition, the district's demolition and the Wonder's build order all go to the
 tile goes straight from its old buildings to the Wonder's construction site and no empty ground is ever drawn.
 Walls come down with the district and are re-created on the Wonder's district a moment after it lands. Once the
 Wonder is standing, one citizen per building that housed one becomes pending population, and before the turn can
-end the game's own Grow City prompt asks where each settles - a rural tile or a specialist seat, wherever you
+end the game's own Grow City prompt asks where each settles: a rural tile or a specialist seat, wherever you
 like.
 
 ![The game's Grow City screen holding the displaced citizens](gallery/03-place-population.jpg)
@@ -46,31 +46,30 @@ count is unchanged once they are placed.*
 | two or more antiquated buildings | yes |
 | one antiquated beside one current-age | no |
 | two current-age | no |
-| anything Ageless - the Palace, the City Hall, a Harbor, unique-quarter buildings, Wonders | no |
+| anything Ageless (the Palace, the City Hall, a Harbor, unique-quarter buildings, Wonders) | no |
 | walls, alongside any of the above | walls neither qualify a tile nor block it, and are kept |
 
-Antiquated means a previous age and not Ageless. The engine enforces none of this on its own - left alone it will
-offer any terrain-valid urban tile whatever stands on it - so this rule is the only thing that decides what is
-ever cleared. It lives in `lib/bwab-eligibility.js` with 23 tests.
+Antiquated means a previous age and not Ageless. The engine enforces none of this on its own; left alone it offers
+any terrain-valid urban tile whatever stands on it. So this rule is the only thing that decides what is ever
+cleared. It lives in `lib/bwab-eligibility.js` with 23 tests.
 
 ## Which Wonders are offered a tile
 
-The mod decides **where** a Wonder may go. It never decides **whether** one may be built. A Wonder that is locked,
-not yet unlocked, or already standing somewhere in the world stays refused, exactly as the base game refuses it.
-Only a refusal that says there is nowhere to put it is this mod's business.
+The mod decides *where* a Wonder may go, not *whether* one may be built. A Wonder that is locked, not yet
+unlocked, or already standing somewhere in the world stays refused, exactly as the base game refuses it. Only a
+refusal that says there is nowhere to put it is this mod's business.
 
-That distinction is load-bearing. Measured in one city: of 48 Wonders, 2 were buildable, 42 were refused for
-reasons that have nothing to do with any tile, and 4 were refused for want of a site. Only those last 4 are ones
-this mod can help with.
+In one city, of 48 Wonders, 2 were buildable, 42 were refused for reasons that have nothing to do with any tile,
+and 4 were refused for want of a site. Only those last 4 are ones this mod can help with.
 
 The Wonder's own placement rules are then checked before a tile is offered for it: terrain, biome, no-feature,
 river (required or forbidden), adjacent terrain, adjacent district, adjacent mountain, adjacent constructible,
-invalid adjacent biomes, homeland or distant lands, and a required constructible in the settlement - every
+invalid adjacent biomes, homeland or distant lands, and a required constructible in the settlement: every
 placement rule the game's data holds for a Wonder. A rule the mod does not evaluate excludes that Wonder rather
 than guessing: a Wonder that must stand on a feature, beside a lake, or on an appeal-chosen site is never
 offered an antiquated tile, and neither is one that uses a rule table no Wonder uses today (required or invalid
-features, feature classes, resources, river placement), should a future Wonder use one. So the mod will
-sometimes offer less than the game would allow and never more.
+features, feature classes, resources, river placement), should a future Wonder use one. So the mod
+sometimes offers less than the game would allow, never more.
 
 The five Wonders that stand on Coast follow placement rules the game keeps to itself, so a coastal urban tile
 (a Lighthouse or Fishing Quay) is offered to one of them only when the game already accepts that Wonder on a
@@ -85,10 +84,10 @@ The build order goes to the game together with the clear, so a refusal shows up 
 Wonder site. The mod watches the tile for about three seconds; if the Wonder has not appeared by then, it puts
 the tile back: the buildings it destroyed are re-created, then the walls, and it reads the tile afterward to
 confirm everything is standing. No citizens are displaced, because they are only added once the Wonder is on the
-tile. The hex is empty for those few seconds and then holds what it held before. Watched on a coastal Wonder
-whose every readable rule passed and which the engine still refused - the tile came back holding its Lighthouse,
-with population, urban and rural counts unchanged and nothing left pending. The cost of a refusal is a few seconds
-of empty hex, not a lost building.
+tile. The hex is empty for those few seconds and then holds what it held before. On a coastal Wonder whose every
+readable rule passed and which the engine still refused, the tile came back holding its Lighthouse, with
+population, urban and rural counts unchanged and nothing left pending. A refusal costs a few seconds of empty hex
+and nothing else.
 
 ## The yield preview
 
@@ -108,14 +107,14 @@ the Wonder from then on. The citizens are not lost: the head count is unchanged 
 
 ## Compatibility
 
-- **No database change**, so a save loads with the mod on or off, and it can join a game already in progress. A
+- No database change, so a save loads with the mod on or off, and it can join a game already in progress. A
   Wonder built this way is ordinary constructible state.
-- **No base-game files are replaced**, and mods that adjust Wonder data are unaffected, because this mod does not
+- No base-game files are replaced, and mods that adjust Wonder data are unaffected, because this mod does not
   touch Wonder data.
-- **Your own city only.** The clear and the build are the local player's own actions on the local player's own
-  settlement. The AI builds Wonders exactly as it always has.
-- **Multiplayer.** Watched in a live LAN game: the clear, the build and the displaced citizens all went through
-  the network session, and a competing placement was refused by the game and rolled back intact.
+- The clear and the build are the local player's own actions on the local player's own settlement. The AI builds
+  Wonders exactly as it always has.
+- Multiplayer works. In a LAN game the clear, the build and the displaced citizens all went through the network
+  session, and a competing placement was refused by the game and rolled back intact.
 - English only for now. The mod's text is two strings, so a translation is a small job.
 
 ## Installation
@@ -127,12 +126,11 @@ the Wonder from then on. The citizens are not lost: the head count is unchanged 
 
 ## Status
 
-Watched working end to end on Civilization VII 1.5.0, 2026-09-24, including a real mouse click on the hex, both
-the one-building and two-building cases, walls preserved on a hill tile, population conserved on both, the
-click going straight to the clear with no prompt of the mod's own, the yield preview reading on the hex and in the panel, and a
-refusal rolling the tile back with nothing lost, the whole thing in a live LAN game, and the tile going from
-its buildings straight to the Wonder's construction site with no empty ground drawn in between. Every step and
-the run that proved it is in [docs/RECIPE.md](docs/RECIPE.md).
+Works end to end on Civilization VII 1.5.0 as of 2026-09-24: a real mouse click on the hex, the one-building and
+two-building cases, walls kept on a hill tile, population conserved on both, the click going straight to the clear
+with no prompt of the mod's own, the yield preview on the hex and in the panel, a refusal rolling the tile back
+with nothing lost, a live LAN game, and the tile going from its buildings straight to the Wonder's construction
+site with no empty ground in between. Each step and the run behind it is in [docs/RECIPE.md](docs/RECIPE.md).
 
 ## Layout
 
@@ -142,7 +140,7 @@ ui/bwab-clear-and-build.js          the mod: placement-screen hooks, the clear, 
 lib/bwab-eligibility.js             the antiquated-tile rule, engine-free, 23 tests
 text/en_us/ModText.xml              name and description
 tests/eligibility.mjs               the rule's tests
-docs/RECIPE.md                      every step and the run that proved it
+docs/RECIPE.md                      each engine step and the run behind it
 docs/steam-workshop-description.md  the Workshop page text
 docs/logo.svg, docs/logo.png        the Workshop preview image
 gallery/                            the screenshots used above
