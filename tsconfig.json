@@ -19,5 +19,5 @@
     "types": []
   },
   "include": ["ui/**/*.js", "lib/**/*.js", "types/**/*.d.ts"],
-  "exclude": ["node_modules", "dist", "devtools"]
+  "exclude": ["node_modules", "dist", "devtools", "ui/settings-keeper.js"]
 }

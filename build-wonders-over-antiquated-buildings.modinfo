@@ -22,7 +22,7 @@
 		<PackageSortIndex>1000</PackageSortIndex>
 		<AffectsSavedGames>0</AffectsSavedGames>
 		<ShowInBrowser>1</ShowInBrowser>
-		<Version>1.0.0</Version>
+		<Version>1.0.1</Version>
 	</Properties>
 	<Dependencies>
 		<Mod id="base-standard" title="LOC_MODULE_BASE_STANDARD_NAME"/>
@@ -40,6 +40,10 @@
 				<UpdateText>
 					<Item>text/en_us/ModText.xml</Item>
 				</UpdateText>
+				<UIScripts>
+					<!-- Tower Settings Keeper: listed first, imports nothing, so it runs before anything reads storage. -->
+					<Item>ui/settings-keeper.js</Item>
+				</UIScripts>
 			</Actions>
 		</ActionGroup>
 		<ActionGroup id="bwab-game" scope="game" criteria="always">
@@ -48,6 +52,8 @@
 					<Item>text/en_us/ModText.xml</Item>
 				</UpdateText>
 				<UIScripts>
+					<!-- Tower Settings Keeper: listed first, imports nothing, so it runs before anything reads storage. -->
+					<Item>ui/settings-keeper.js</Item>
 					<Item>ui/bwab-clear-and-build.js</Item>
 				</UIScripts>
 			</Actions>
