@@ -4,6 +4,11 @@ All notable changes to Build Wonders Over Antiquated Buildings are documented he
 versioning. The history of the routes that were tried before this design, and the probe runs behind them, is in
 `mod_ideas_tested/build_wonders_over_antiquated_buildings/CHANGELOG-2026-09-24-before-split.md`.
 
+## [1.0.2] - 2026-10-14
+
+- The license now says that Civilization VII and its art and data belong to Firaxis and 2K, and that the
+  screenshots are there for illustration. The mod itself plays exactly as in 1.0.1.
+
 ## [1.0.1] - 2026-10-07
 
 - Settings kept after a restart. Civilization VII reads back only the first entry in its mod storage, whichever one
