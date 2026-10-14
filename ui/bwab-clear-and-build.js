@@ -36,13 +36,9 @@ const CACHE_MS = 1500;
 
 /** @param {string} m */
 function log(m) { try { console.warn(TAG + m); } catch (_) { /* logging must never throw */ } }
-/**
- * Run an engine read, returning a fallback on any throw.
- * @template T
- * @param {() => T} fn @param {T} fb @returns {T}
- */
+/** @template T @param {() => T} fn @param {T} fb @returns {T} */
 function safe(fn, fb) { try { return fn(); } catch (_) { return fb; } }
-/** @param {*} o @returns {string} */
+/** @param {*} o */
 function J(o) { try { return JSON.stringify(o); } catch (_) { return "?"; } }
 
 /** @type {Set<string>|null} */
@@ -55,13 +51,12 @@ function ageless() {
   agelessCache = s;
   return s;
 }
-/** @returns {string} The current AgeType. */
 function currentAge() { return safe(() => String(GameInfo.Ages.lookup(Game.age).AgeType), ""); }
-/** @param {*} cityID @returns {string} */
+/** @param {*} cityID */
 function cityKey(cityID) { return safe(() => cityID.owner + ":" + cityID.id, String(cityID)); }
 /** @param {*} typeOrIndex @returns {*} The Constructibles row, or null. */
 function defOf(typeOrIndex) { return safe(() => GameInfo.Constructibles.lookup(typeOrIndex), null); }
-/** @param {number} x @param {number} y @returns {string} */
+/** @param {number} x @param {number} y */
 function terrainAt(x, y) {
   return safe(() => String(GameInfo.Terrains.lookup(GameplayMap.getTerrainType(x, y)).TerrainType), "");
 }
@@ -135,10 +130,7 @@ function readTile(plot) {
   }, null);
 }
 
-/**
- * @param {Tile} tile
- * @returns {Array<{terrain:string, biome:string, district:string, types:string[]}>} The six neighbors.
- */
+/** @param {Tile} tile */
 function neighbours(tile) {
   const out = [];
   for (let dir = 0; dir < 6; dir++) {
