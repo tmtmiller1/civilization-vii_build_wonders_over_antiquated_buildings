@@ -373,7 +373,7 @@ function isInjected(cityID, def, plot) {
 /** @type {Array<{plot:number, owner:number, walls:string[]}>} Walls to put back once a Wonder lands. */
 const wallRestores = [];
 
-/** @param {Occupant[]} list @returns {string[]} The wall types in it. */
+/** @param {Occupant[]} list */
 function wallTypes(list) { return list.filter((o) => o.existingDistrictOnly).map((o) => o.type); }
 
 /** How long the burst is given to land before it is judged, in polls of POLL_MS. */
@@ -607,7 +607,7 @@ function wonderOf(type, args) {
   return def && def.ConstructibleClass === "WONDER" ? def : null;
 }
 
-/** @param {*} res The engine's answer. @param {number[]} extra @returns {*} The answer plus our plots. */
+/** @param {*} res @param {number[]} extra */
 function withPlots(res, extra) {
   const plots = Array.from((res && res.Plots) || []);
   for (const p of extra) if (!plots.includes(p)) plots.push(p);
