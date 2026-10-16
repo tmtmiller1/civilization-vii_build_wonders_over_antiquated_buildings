@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Database>
+    <LocalizedText>
+        <Replace Tag="LOC_BWAB_NAME" Language="pt_BR"><Text>Construir Maravilhas sobre edificações antiquadas</Text></Replace>
+        <Replace Tag="LOC_BWAB_DESCRIPTION" Language="pt_BR"><Text>Permite construir uma Maravilha em um painel urbano cujas edificações sejam todas de uma Era anterior. Escolha o painel na tela de posicionamento da Maravilha: as edificações antigas são demolidas, as muralhas ficam, você mesmo posiciona os cidadãos desalojados pelo aviso habitual de Expandir cidade, e a Maravilha se ergue em um verdadeiro distrito de Maravilha. Se o jogo recusar o local mesmo assim, o painel volta a ser como era. Os dados do jogo continuam como estão, e as Maravilhas também. Em Opções, Complementos, você pode desativar o mod ou contar só as edificações de duas Eras atrás.</Text></Replace>
+        <Replace Tag="LOC_OPTIONS_GROUP_BWAB" Language="pt_BR"><Text>Maravilhas sobre edificações antiquadas</Text></Replace>
+        <Replace Tag="LOC_BWAB_OPTION_ENABLED" Language="pt_BR"><Text>Oferecer painéis antiquados para Maravilhas</Text></Replace>
+        <Replace Tag="LOC_BWAB_OPTION_ENABLED_DESCRIPTION" Language="pt_BR"><Text>Com esta opção ativada, a tela de posicionamento de uma Maravilha também oferece painéis urbanos cujas edificações são todas antiquadas, e escolher um deles o libera para a Maravilha. Desative-a e você verá só os locais oferecidos pelo próprio jogo. Uma Maravilha que você já posicionou assim continua sendo construída normalmente.</Text></Replace>
+        <Replace Tag="LOC_BWAB_OPTION_RULE" Language="pt_BR"><Text>Antiquado significa</Text></Replace>
+        <Replace Tag="LOC_BWAB_OPTION_RULE_EARLIER" Language="pt_BR"><Text>De qualquer Era anterior</Text></Replace>
+        <Replace Tag="LOC_BWAB_OPTION_RULE_TWO_AGES" Language="pt_BR"><Text>De duas Eras atrás</Text></Replace>
+        <Replace Tag="LOC_BWAB_OPTION_RULE_DESCRIPTION" Language="pt_BR"><Text>Quais edificações contam como antiquadas. De qualquer Era anterior: um painel é oferecido quando todas as edificações nele são de uma Era anterior. De duas Eras atrás: só contam edificações de duas Eras atrás, então na Era Moderna um painel com edificações da Antiguidade é oferecido e um com uma edificação da Exploração não é, e na Exploração você verá só os locais do próprio jogo. Uma edificação Atemporal sempre deixa seu painel fora da lista, e as muralhas ficam em qualquer caso.</Text></Replace>
+    </LocalizedText>
+</Database>

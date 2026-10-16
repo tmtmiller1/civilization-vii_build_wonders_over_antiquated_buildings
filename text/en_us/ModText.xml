@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
   Keep this file minimal and every tag unique: one duplicate LOC tag rolls back the whole file,
-  and the mod's name then shows as a raw tag in the Additional Content browser.
+  and the mod's name then shows as a raw tag in the Additional Content browser. Every other
+  language carries the same tags in text/<lang>/ModText.xml; change one and change them all.
 -->
 <Database>
     <EnglishText>
@@ -9,7 +10,28 @@
             <Text>Build Wonders Over Antiquated Buildings</Text>
         </Row>
         <Row Tag="LOC_BWAB_DESCRIPTION">
-            <Text>Lets a Wonder be built on an urban tile whose buildings are all from an earlier age. Pick the tile on the Wonder placement screen: the old buildings are cleared, the walls stay, the displaced citizens are yours to place through the usual Grow City prompt, and the Wonder rises on a proper Wonder district. If the game refuses the site after all, the tile is put back. No database changes; Wonders stay exactly as they are.</Text>
+            <Text>Lets a Wonder be built on an urban tile whose buildings are all from an earlier age. Pick the tile on the Wonder placement screen: the old buildings are cleared, the walls stay, the displaced citizens are yours to place through the usual Grow City prompt, and the Wonder rises on a proper Wonder district. If the game refuses the site after all, the tile is put back. The game's data isn't changed, so Wonders stay exactly as they are. In Options, Add-ons you can switch the mod off or count only buildings from two ages back.</Text>
+        </Row>
+        <Row Tag="LOC_OPTIONS_GROUP_BWAB">
+            <Text>Build Wonders Over Antiquated Buildings</Text>
+        </Row>
+        <Row Tag="LOC_BWAB_OPTION_ENABLED">
+            <Text>Offer antiquated tiles for Wonders</Text>
+        </Row>
+        <Row Tag="LOC_BWAB_OPTION_ENABLED_DESCRIPTION">
+            <Text>When this is on, a Wonder's placement screen also offers urban tiles whose buildings are all antiquated, and picking one clears the tile for the Wonder. Turn it off and you'll see only the game's own sites. A Wonder you've already placed this way carries on as normal.</Text>
+        </Row>
+        <Row Tag="LOC_BWAB_OPTION_RULE">
+            <Text>Antiquated means</Text>
+        </Row>
+        <Row Tag="LOC_BWAB_OPTION_RULE_EARLIER">
+            <Text>From any earlier age</Text>
+        </Row>
+        <Row Tag="LOC_BWAB_OPTION_RULE_TWO_AGES">
+            <Text>From two ages back</Text>
+        </Row>
+        <Row Tag="LOC_BWAB_OPTION_RULE_DESCRIPTION">
+            <Text>Which buildings count as antiquated. From any earlier age: a tile is offered when every building on it is from an earlier age. From two ages back: only buildings from two ages ago count, so in the Modern age a tile of Antiquity buildings is offered and a tile with an Exploration building isn't, and in the Exploration age you'll see only the game's own sites. Ageless buildings always keep a tile off the list, and walls stay either way.</Text>
         </Row>
     </EnglishText>
 </Database>

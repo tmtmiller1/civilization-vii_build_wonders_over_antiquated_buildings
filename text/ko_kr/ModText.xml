@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Database>
+    <LocalizedText>
+        <Replace Tag="LOC_BWAB_NAME" Language="ko_KR"><Text>낡은 건물 위에 불가사의 건설</Text></Replace>
+        <Replace Tag="LOC_BWAB_DESCRIPTION" Language="ko_KR"><Text>모든 건물이 이전 시대의 것인 시가지 타일에 불가사의를 건설할 수 있게 합니다. 불가사의 배치 화면에서 그 타일을 고르면 옛 건물은 철거되고, 성벽은 남으며, 쫓겨난 시민은 평소의 도시 성장 화면에서 직접 배치하고, 불가사의는 제대로 된 불가사의 특수지구에 세워집니다. 그래도 게임이 그 부지를 거부하면 타일은 원래대로 돌아갑니다. 게임 데이터는 그대로이므로 불가사의도 그대로입니다. 옵션의 추가 콘텐츠에서 이 모드를 끄거나 두 시대 전 건물만 대상으로 할 수 있습니다.</Text></Replace>
+        <Replace Tag="LOC_OPTIONS_GROUP_BWAB" Language="ko_KR"><Text>낡은 건물 위에 불가사의 건설</Text></Replace>
+        <Replace Tag="LOC_BWAB_OPTION_ENABLED" Language="ko_KR"><Text>낡은 타일을 불가사의 부지로 제시</Text></Replace>
+        <Replace Tag="LOC_BWAB_OPTION_ENABLED_DESCRIPTION" Language="ko_KR"><Text>켜면 불가사의 배치 화면에 모든 건물이 낡은 시가지 타일도 표시되고, 그중 하나를 고르면 불가사의를 위해 타일이 비워집니다. 끄면 게임이 원래 제시하는 부지만 보입니다. 이미 이 방법으로 배치한 불가사의는 평소대로 계속 건설됩니다.</Text></Replace>
+        <Replace Tag="LOC_BWAB_OPTION_RULE" Language="ko_KR"><Text>낡은 건물의 기준</Text></Replace>
+        <Replace Tag="LOC_BWAB_OPTION_RULE_EARLIER" Language="ko_KR"><Text>이전의 모든 시대</Text></Replace>
+        <Replace Tag="LOC_BWAB_OPTION_RULE_TWO_AGES" Language="ko_KR"><Text>두 시대 전</Text></Replace>
+        <Replace Tag="LOC_BWAB_OPTION_RULE_DESCRIPTION" Language="ko_KR"><Text>어떤 건물을 낡은 것으로 칠지 정합니다. 이전의 모든 시대: 타일의 모든 건물이 이전 시대의 것이면 그 타일이 제시됩니다. 두 시대 전: 두 시대 전의 건물만 해당되므로, 근대에는 고대 건물로 된 타일은 제시되지만 대항해 시대 건물이 있는 타일은 제시되지 않고, 대항해 시대에는 게임이 원래 제시하는 부지만 보입니다. 시대 초월 건물이 있는 타일은 항상 목록에서 빠지고, 성벽은 어느 경우에도 남습니다.</Text></Replace>
+    </LocalizedText>
+</Database>

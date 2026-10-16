@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Database>
+    <LocalizedText>
+        <Replace Tag="LOC_BWAB_NAME" Language="zh_Hant_HK"><Text>在過時建築上建造奇觀</Text></Replace>
+        <Replace Tag="LOC_BWAB_DESCRIPTION" Language="zh_Hant_HK"><Text>允許在所有建築都來自較早時代的都會格位上建造奇觀。在奇觀的放置介面中選擇該格位：舊建築會被拆除，城牆保留，被遷出的市民由你透過慣常的「增長城市」提示親自安置，奇觀則建在真正的奇觀區域上。如果遊戲最終仍拒絕該位置，格位會恢復原狀。遊戲資料保持原樣，奇觀也保持原樣。在「選項」的「附加內容」中，你可以關閉本模組，或只計算兩個時代以前的建築。</Text></Replace>
+        <Replace Tag="LOC_OPTIONS_GROUP_BWAB" Language="zh_Hant_HK"><Text>在過時建築上建造奇觀</Text></Replace>
+        <Replace Tag="LOC_BWAB_OPTION_ENABLED" Language="zh_Hant_HK"><Text>為奇觀提供過時格位</Text></Replace>
+        <Replace Tag="LOC_BWAB_OPTION_ENABLED_DESCRIPTION" Language="zh_Hant_HK"><Text>開啟後，奇觀的放置介面還會提供所有建築都已過時的都會格位，選擇其中一個就會為奇觀清空該格位。關閉後，你只會看到遊戲本身提供的位置。已經用這種方式放置的奇觀會照常繼續建造。</Text></Replace>
+        <Replace Tag="LOC_BWAB_OPTION_RULE" Language="zh_Hant_HK"><Text>過時的標準</Text></Replace>
+        <Replace Tag="LOC_BWAB_OPTION_RULE_EARLIER" Language="zh_Hant_HK"><Text>任何較早的時代</Text></Replace>
+        <Replace Tag="LOC_BWAB_OPTION_RULE_TWO_AGES" Language="zh_Hant_HK"><Text>兩個時代以前</Text></Replace>
+        <Replace Tag="LOC_BWAB_OPTION_RULE_DESCRIPTION" Language="zh_Hant_HK"><Text>哪些建築算作過時。任何較早的時代：格位上的每座建築都來自較早的時代時，提供該格位。兩個時代以前：只計算兩個時代以前的建築，因此在近代，只有古典時代建築的格位會被提供，而有探索時代建築的格位不會；在探索時代，你只會看到遊戲本身提供的位置。不分時代的建築總會讓所在格位排除在列表之外，城牆在任何情況下都會保留。</Text></Replace>
+    </LocalizedText>
+</Database>

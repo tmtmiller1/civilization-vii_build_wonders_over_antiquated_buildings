@@ -4,6 +4,25 @@ All notable changes to Build Wonders Over Antiquated Buildings are documented he
 versioning. The history of the routes that were tried before this design, and the probe runs behind them, is in
 `mod_ideas_tested/build_wonders_over_antiquated_buildings/CHANGELOG-2026-09-24-before-split.md`.
 
+## [Unreleased]
+
+- Two settings in Options > Add-ons. **Offer antiquated tiles for Wonders** (on by default) switches the mod's offer
+  on or off without leaving the game; off, a Wonder's placement screen shows only the game's own sites.
+  **Antiquated means** picks how old a building has to be: from any earlier age (the default, the rule so far) or from
+  two ages back, which in the Modern age counts Antiquity buildings only and in the Exploration age leaves only the
+  game's own sites. Both are kept in the shared settings store the bundled Tower Settings Keeper looks after, so they
+  hold across a restart, and your save stays out of it. The mod reads them once and keeps them in memory, so the
+  production list stays as quick as before.
+- The mod's text is in German, Spanish, French, Italian, Japanese, Korean, Polish, Portuguese (Brazil), Russian and
+  Chinese (Simplified and Traditional) as well as English, following the game's language setting.
+- Rila Monastery isn't offered an antiquated tile any more. It can't stand next to a district, and nearly every
+  urban tile has one beside it, so the game would turn the site down and you'd see a few seconds of empty hex before
+  the mod put your buildings back.
+- The README and the Workshop page now name the Wonders the mod leaves out and why: Ubudiah Mosque has to stand on a
+  wet feature, Shwedagon Zedi Daw and Muzibu Azaala Mpanga beside a lake, and Rila Monastery away from any district.
+  Battersea Power Station, Hale o Keawe and Havana Harbor carry a next-to-land rule the mod doesn't check, so they're
+  left out as well, as they have been since 0.3.0.
+
 ## [1.0.2] - 2026-10-14
 
 - The license now says that Civilization VII and its art and data belong to Firaxis and 2K, and that the

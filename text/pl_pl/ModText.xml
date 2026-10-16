@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Database>
+    <LocalizedText>
+        <Replace Tag="LOC_BWAB_NAME" Language="pl_PL"><Text>Cuda na miejscu przestarzałych budowli</Text></Replace>
+        <Replace Tag="LOC_BWAB_DESCRIPTION" Language="pl_PL"><Text>Pozwala zbudować Cud na polu miejskim, na którym wszystkie budowle pochodzą z wcześniejszej epoki. Wybierz pole na ekranie umieszczania Cudu: stare budowle zostają zburzone, mury zostają, wysiedlonych mieszkańców umieszczasz sam przez zwykły ekran „Powiększ miasto”, a Cud wznosi się na prawdziwym dystrykcie Cudu. Jeśli gra mimo wszystko odrzuci to miejsce, pole wraca do poprzedniego stanu. Dane gry pozostają bez zmian, więc Cuda są dokładnie takie jak w grze. W Opcjach, w zakładce Dodatki, możesz wyłączyć moda albo liczyć tylko budowle sprzed dwóch epok.</Text></Replace>
+        <Replace Tag="LOC_OPTIONS_GROUP_BWAB" Language="pl_PL"><Text>Cuda na miejscu przestarzałych budowli</Text></Replace>
+        <Replace Tag="LOC_BWAB_OPTION_ENABLED" Language="pl_PL"><Text>Proponuj przestarzałe pola pod Cuda</Text></Replace>
+        <Replace Tag="LOC_BWAB_OPTION_ENABLED_DESCRIPTION" Language="pl_PL"><Text>Gdy ta opcja jest włączona, ekran umieszczania Cudu proponuje też pola miejskie, na których wszystkie budowle są przestarzałe, a wybranie takiego pola oczyszcza je pod Cud. Po wyłączeniu zobaczysz tylko miejsca proponowane przez samą grę. Cud już umieszczony w ten sposób jest budowany dalej normalnie.</Text></Replace>
+        <Replace Tag="LOC_BWAB_OPTION_RULE" Language="pl_PL"><Text>Przestarzałe oznacza</Text></Replace>
+        <Replace Tag="LOC_BWAB_OPTION_RULE_EARLIER" Language="pl_PL"><Text>Z dowolnej wcześniejszej epoki</Text></Replace>
+        <Replace Tag="LOC_BWAB_OPTION_RULE_TWO_AGES" Language="pl_PL"><Text>Sprzed dwóch epok</Text></Replace>
+        <Replace Tag="LOC_BWAB_OPTION_RULE_DESCRIPTION" Language="pl_PL"><Text>Które budowle liczą się jako przestarzałe. Z dowolnej wcześniejszej epoki: pole jest proponowane, gdy każda budowla na nim pochodzi z wcześniejszej epoki. Sprzed dwóch epok: liczą się tylko budowle sprzed dwóch epok, więc w epoce nowożytnej pole z budowlami z epoki antyku jest proponowane, a pole z budowlą z epoki odkryć już nie, a w epoce odkryć zobaczysz tylko miejsca proponowane przez samą grę. Budowla ponadczasowa zawsze wyklucza swoje pole z listy, a mury zostają w każdym przypadku.</Text></Replace>
+    </LocalizedText>
+</Database>

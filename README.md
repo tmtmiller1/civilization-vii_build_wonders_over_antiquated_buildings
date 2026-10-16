@@ -49,9 +49,30 @@ count is unchanged once they are placed.*
 | anything Ageless (the Palace, the City Hall, a Harbor, unique-quarter buildings, Wonders) | no |
 | walls, alongside any of the above | walls neither qualify a tile nor block it, and are kept |
 
-Antiquated means a previous age and not Ageless. The engine enforces none of this on its own; left alone it offers
-any terrain-valid urban tile whatever stands on it. So this rule is the only thing that decides what is ever
-cleared. It lives in `lib/bwab-eligibility.js` with 23 tests.
+Antiquated means a previous age and not Ageless, or two ages back if you pick that in the options below. The engine
+enforces none of this on its own; left alone it offers any terrain-valid urban tile whatever stands on it. So this
+rule is the only thing that decides what is ever cleared. It lives in `lib/bwab-eligibility.js` with 36 tests.
+
+## Options
+
+Options > Add-ons has a **Build Wonders Over Antiquated Buildings** header with two settings, in the main menu and in
+a game:
+
+| Setting | Choices | Default |
+| --- | --- | --- |
+| Offer antiquated tiles for Wonders | on, off | on |
+| Antiquated means | From any earlier age, From two ages back | From any earlier age |
+
+Turn the first off and a Wonder's placement screen shows only the game's own sites. A clear that's already under way
+still finishes. "From two ages back" counts only buildings from two ages ago: in the Modern age a tile of Antiquity
+buildings is offered and a tile holding an Exploration building isn't, and in the Exploration age you'll see only the
+game's own sites. Ageless buildings and walls work the same under both choices, and the second setting is greyed out
+while the first is off.
+
+The settings are yours rather than the save's. They're kept in the shared settings store that the bundled Tower
+Settings Keeper keeps readable, so they hold across a restart, and a save loads the same whatever they're set to. The
+mod reads them once and keeps them in memory, because the placement hook runs for every item in the production list.
+The design and the checks it still needs in a game are in [docs/OPTIONS.md](docs/OPTIONS.md).
 
 ## Which Wonders are offered a tile
 
@@ -64,16 +85,19 @@ and 4 were refused for want of a site. Only those last 4 are ones this mod can h
 
 The Wonder's own placement rules are then checked before a tile is offered for it: terrain, biome, no-feature,
 river (required or forbidden), adjacent terrain, adjacent district, adjacent mountain, adjacent constructible,
-invalid adjacent biomes, homeland or distant lands, and a required constructible in the settlement: every
-placement rule the game's data holds for a Wonder. A rule the mod does not evaluate excludes that Wonder rather
-than guessing: a Wonder that must stand on a feature, beside a lake, or on an appeal-chosen site is never
-offered an antiquated tile, and neither is one that uses a rule table no Wonder uses today (required or invalid
-features, feature classes, resources, river placement), should a future Wonder use one. So the mod
-sometimes offers less than the game would allow, never more.
+invalid adjacent biomes, homeland or distant lands, and a required constructible in the settlement. A rule the mod
+doesn't evaluate leaves that Wonder out rather than guessing. In the 1.5.0 data that's four Wonders on land:
+Ubudiah Mosque, which has to stand on a wet feature such as a marsh or an oasis; Shwedagon Zedi Daw and Muzibu
+Azaala Mpanga, which have to stand beside a lake; and Rila Monastery, which can't stand next to a district, when
+nearly every urban tile has one beside it. Battersea Power Station is left out too. Its data carries the
+next-to-land rule that the coast Wonders use, and the mod leaves out every Wonder with that rule. The appeal rule,
+the other feature tables (required, valid or invalid features) and the resource table would leave a Wonder out the
+same way, though no Wonder uses them in 1.5.0. So the mod sometimes offers less than the game would allow.
 
-The five Wonders that stand on Coast follow placement rules the game keeps to itself, so a coastal urban tile
-(a Lighthouse or Fishing Quay) is offered to one of them only when the game already accepts that Wonder on a
-bare coast tile of the same city.
+The Wonders that stand on Coast follow placement rules the game keeps to itself. Of the ones you can build once a
+tile is antiquated, Nan Madol is offered a coastal urban tile (a Lighthouse or Fishing Quay) only when the game
+already accepts it on a bare coast tile of the same city. Hale o Keawe and Havana Harbor carry the next-to-land rule
+and are left out, and so is the Statue of Liberty, which also has a river-placement rule the mod doesn't read.
 
 ## If the game refuses the site after all
 
@@ -115,7 +139,8 @@ the Wonder from then on. The citizens are not lost: the head count is unchanged 
   Wonders exactly as it always has.
 - Multiplayer works. In a LAN game the clear, the build and the displaced citizens all went through the network
   session, and a competing placement was refused by the game and rolled back intact.
-- English only for now. The mod's text is two strings, so a translation is a small job.
+- The text is in English, German, Spanish, French, Italian, Japanese, Korean, Polish, Portuguese (Brazil), Russian
+  and Chinese (Simplified and Traditional), following the game's language setting.
 
 ## Installation
 
@@ -132,31 +157,42 @@ with no prompt of the mod's own, the yield preview on the hex and in the panel, 
 with nothing lost, a live LAN game, and the tile going from its buildings straight to the Wonder's construction
 site with no empty ground in between. Each step and the run behind it is in [docs/RECIPE.md](docs/RECIPE.md).
 
+The two options, the translations and leaving out Rila Monastery are built and pass the offline tests, but they
+haven't been watched in a game yet. What a lab run has to show is listed at the end of
+[docs/OPTIONS.md](docs/OPTIONS.md).
+
 ## Layout
 
 ```
-build-wonders-over-antiquated-buildings.modinfo   one script, no data
-ui/bwab-clear-and-build.js          the mod: placement-screen hooks, the clear, the walls, the yield preview, the rollback
-lib/bwab-eligibility.js             the antiquated-tile rule, engine-free, 23 tests
-text/en_us/ModText.xml              name and description
+build-wonders-over-antiquated-buildings.modinfo   one game script and the Options rows, no data
+ui/bwab-clear-and-build.js          the mod: placement hooks, the clear, walls, yield preview, rollback
+ui/bwab-settings.js                 the two settings: defaults, read once and kept, the guarded write
+ui/bwab-options.js                  the two rows in Options > Add-ons
+ui/settings-keeper.js               Tower Settings Keeper BUILD 112, copied unchanged
+lib/bwab-eligibility.js             the tile rule and the unread Wonder rules, 36 tests
+text/en_us/ModText.xml              name, description and the Options text
+text/<lang>/ModText.xml             the same text in each of 11 other languages
 tests/eligibility.mjs               the rule's tests
+tests/settings.mjs                  the settings' tests (11)
 docs/RECIPE.md                      each engine step and the run behind it
+docs/OPTIONS.md                     the two options, where they're kept, and the lab checks they need
 docs/steam-workshop-description.md  the Workshop page text
 docs/logo.svg, docs/logo.png        the Workshop preview image
 gallery/                            the screenshots used above
-devtools/README.md                  where the harness lives (mod_ideas_tested) and the one command to re-verify
+devtools/README.md                  where the harness lives (mod_ideas_tested) and how to re-verify
 eslint.config.js, tsconfig.json, types/, package.json, scripts/   dev tooling, not shipped
 install-dev.sh                      copies the mod into the game's Mods folder
-release.sh                          builds dist/: the release zip, the Workshop preview and the steamcmd manifest
-CHANGELOG.steam.txt                 the Workshop change notes, kept in step with CHANGELOG.md by scripts/steam-changelog.mjs
+release.sh                          builds dist/: release zip, Workshop preview, steamcmd manifest
+CHANGELOG.steam.txt                 the Workshop change notes, built from CHANGELOG.md
 ```
 
 `npm run verify` runs everything that can be checked without the game: `tsc --noEmit` over the JSDoc types,
-`eslint ui lib`, and the eligibility tests. Zero errors and zero warnings is the bar. `npm run readme:pdf` builds
-`README.pdf` from this file.
+`eslint ui lib`, and the eligibility and settings tests. Zero errors and zero warnings is the bar.
+`npm run readme:pdf` builds `README.pdf` from this file.
 
-In a running game, `globalThis.__bwab.enabled = false` makes every hook pass straight through, and
-`globalThis.__bwab.uninstall()` restores the engine's own methods; both are for troubleshooting.
+In a running game, `globalThis.__bwab.enabled = false` makes every hook pass straight through,
+`globalThis.__bwab.uninstall()` restores the engine's own methods, and `globalThis.__bwab.settings()` shows the
+options as the script holds them; all three are for troubleshooting.
 
 The routes that were tried and set aside, the probes, and the harness runs live in the author's working tree
 (`mod_ideas_tested/build_wonders_over_antiquated_buildings`), outside this repository; `devtools/README.md` lists

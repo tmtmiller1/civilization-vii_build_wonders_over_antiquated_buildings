@@ -19,12 +19,19 @@
 // on an empty tile.
 //
 // Which tiles: lib/bwab-eligibility.js. Which Wonders for a tile: the Wonder's own placement rules,
-// evaluated here; a rule this file cannot evaluate excludes the Wonder rather than guessing.
+// evaluated here; a rule the mod reads but doesn't evaluate (unreadRule in the same lib file) leaves the Wonder
+// out rather than guessing.
+//
+// The player's two options (ui/bwab-settings.js, docs/OPTIONS.md) are read once and kept in memory:
+// the switch decides whether any tile is offered, the rule how old a building has to be.
 //
 // One globalThis key with a kill switch and an uninstall that restores the originals; every engine
 // call guarded; nothing thrown into an engine callback; imports under the mod id.
 
-import { evaluateTile } from "/tower-build-wonders-over-antiquated-buildings/lib/bwab-eligibility.js";
+import { evaluateTile, unreadRule } from "/tower-build-wonders-over-antiquated-buildings/lib/bwab-eligibility.js";
+import {
+  SETTINGS_CHANGED_EVENT, getSettings, refreshSettings
+} from "/tower-build-wonders-over-antiquated-buildings/ui/bwab-settings.js";
 
 const G = /** @type {*} */ (globalThis);
 const KEY = "__bwab";
@@ -52,6 +59,17 @@ function ageless() {
   return s;
 }
 function currentAge() { return safe(() => String(GameInfo.Ages.lookup(Game.age).AgeType), ""); }
+/** @type {string[]|null} */
+let ageOrderCache = null;
+/** @returns {string[]} Every AgeType, oldest first, by the ChronologyIndex the game's unlocks screen sorts by. */
+function ageOrder() {
+  if (ageOrderCache) return ageOrderCache;
+  const rows = safe(() => Array.from(GameInfo.Ages), []);
+  rows.sort((/** @type {*} */ a, /** @type {*} */ b) => (a.ChronologyIndex || 0) - (b.ChronologyIndex || 0));
+  const order = rows.map((/** @type {*} */ r) => String(r.AgeType));
+  if (order.length) ageOrderCache = order;
+  return order;
+}
 /** @param {*} cityID */
 function cityKey(cityID) { return safe(() => cityID.owner + ":" + cityID.id, String(cityID)); }
 /** @param {*} typeOrIndex @returns {*} The Constructibles row, or null. */
@@ -171,21 +189,7 @@ function fitsGround(def, tile, cityID) {
   const biomes = rowsFor("Constructible_ValidBiomes", t, "BiomeType");
   if (terrains.length && !terrains.includes(tile.terrain)) return false;
   if (biomes.length && !biomes.includes(tile.biome)) return false;
-  if (rowsFor("Constructible_ValidFeatures", t, "FeatureType").length) return false; // needs a feature
-  if (def.NoFeature && tile.feature) return false;
-  return !usesUnreadRules(def, t);
-}
-
-/**
- * Rules no Wonder uses today (required features or feature classes, invalid features, valid resources,
- * river placement); if one ever does, that Wonder is excluded rather than guessed at.
- * @param {*} def @param {string} t @returns {boolean}
- */
-function usesUnreadRules(def, t) {
-  if (def.RiverPlacement) return true;
-  const tables = ["Constructible_RequiredFeatures", "Constructible_RequiredFeatureClasses",
-    "Constructible_InvalidFeatures", "Constructible_ValidResources"];
-  return tables.some((table) => rowsFor(table, t, "ConstructibleType").length > 0);
+  return !(def.NoFeature && tile.feature);
 }
 
 /**
@@ -222,14 +226,12 @@ function fitsLands(def, tile) {
 }
 
 /**
- * The Wonder's river and feature flags. Rules this file does not evaluate (lake, appeal) exclude the
- * Wonder rather than guessing.
+ * The Wonder's river flags.
  * @param {*} def @param {Tile} tile @returns {boolean}
  */
 function fitsFlags(def, tile) {
   if (def.AdjacentRiver && tile.river !== true) return false;
-  if (def.NoRiver && tile.river) return false;
-  return !def.AdjacentLake && !def.RequiresAppealPlacement;
+  return !(def.NoRiver && tile.river);
 }
 
 /**
@@ -272,10 +274,16 @@ function fitsSettlement(w, city) {
   return have >= (w.RequiredConstructibleInSettlementCount || 1);
 }
 
-/** @param {*} def @param {Tile} tile @param {*} city @param {*} cityID @returns {boolean} */
+/**
+ * A Wonder with a rule the mod reads but doesn't evaluate (lake adjacency, appeal, river placement, BuildOnFrontier,
+ * a feature or resource table; lib/bwab-eligibility.js unreadRule) is left out before any tile is looked at.
+ * @param {*} def @param {Tile} tile @param {*} city @param {*} cityID @returns {boolean}
+ */
 function wonderFitsTile(def, tile, city, cityID) {
+  const t = String(def.ConstructibleType);
+  const w = safe(() => GameInfo.Wonders.lookup(t), null);
+  if (unreadRule(def, w, (table) => rowsFor(table, t, "ConstructibleType").length > 0)) return false;
   if (!fitsGround(def, tile, cityID) || !fitsFlags(def, tile) || !fitsLands(def, tile)) return false;
-  const w = safe(() => GameInfo.Wonders.lookup(def.ConstructibleType), null);
   if (!w) return true;
   if (w.MustBeLake || w.AdjacentToLand) return false; // water Wonders
   return fitsNeighbours(def, w, tile) && fitsSettlement(w, city);
@@ -336,9 +344,10 @@ function eligiblePlotsFor(cityID, def) {
   const mine = city && safe(() => city.owner, -1) === safe(() => GameContext.localPlayerID, -2);
   if (mine && engineAllows(cityID, def)) {
     const age = currentAge();
+    const rule = { agesBack: getSettings().agesBack, ageOrder: ageOrder() };
     for (const plot of safe(() => city.getPurchasedPlots() || [], [])) {
       const tile = readTile(plot);
-      if (tile && evaluateTile(tile, age).eligible && wonderFitsTile(def, tile, city, cityID)) plots.push(plot);
+      if (tile && evaluateTile(tile, age, rule).eligible && wonderFitsTile(def, tile, city, cityID)) plots.push(plot);
     }
   }
   cache.set(k, { at: Date.now(), plots });
@@ -568,7 +577,7 @@ function patchPlacementManager(BPM) {
   const original = BPM.getPlacementPlotData.bind(BPM);
   BPM.getPlacementPlotData = (/** @type {number} */ plotIndex) => {
     const mine = original(plotIndex);
-    if (mine || !state.enabled) return mine;
+    if (mine || !active()) return mine;
     const cityID = safe(() => BPM.cityID, null);
     const def = safe(() => BPM.currentConstructible, null);
     if (!cityID || !def || def.ConstructibleClass !== "WONDER") return mine;
@@ -594,6 +603,9 @@ async function hookPlacementScreen() {
 /** @type {{enabled:boolean, originals:{canStart:*, sendRequest:*}|null}} */
 const state = { enabled: true, originals: null };
 
+/** Whether the mod offers tiles right now: the console kill switch and the player's own switch both on. */
+function active() { return state.enabled && getSettings().enabled; }
+
 /** @param {*} args @returns {number} The plot index of an {X, Y} request, or -1. */
 function plotOf(args) {
   if (!args || args.X == null || args.Y == null) return -1;
@@ -602,7 +614,7 @@ function plotOf(args) {
 
 /** @param {*} type @param {*} args @returns {*} The Wonder row a BUILD request names, else null. */
 function wonderOf(type, args) {
-  if (!state.enabled || type !== CityOperationTypes.BUILD || !args) return null;
+  if (!active() || type !== CityOperationTypes.BUILD || !args) return null;
   const def = defOf(args.ConstructibleType);
   return def && def.ConstructibleClass === "WONDER" ? def : null;
 }
@@ -647,6 +659,19 @@ function wrapSendRequest(oSend) {
   };
 }
 
+/**
+ * A change on the Options screen drops the cached plot lists so the next listing uses it. The start of each of the
+ * local player's turns also reads the store once, in case the change came from a script context this one can't hear.
+ */
+function listenForSettings() {
+  safe(() => window.addEventListener(SETTINGS_CHANGED_EVENT, () => cache.clear()), null);
+  safe(() => engine.on("PlayerTurnActivated", (/** @type {*} */ data) => safe(() => {
+    if (data && data.player !== GameContext.localPlayerID) return;
+    refreshSettings();
+    cache.clear();
+  }, null)), null);
+}
+
 /** Install the two wraps and the wall-restore listeners. @returns {boolean} */
 function install() {
   const host = safe(() => Game.CityOperations, null);
@@ -659,6 +684,7 @@ function install() {
   host.sendRequest = wrapSendRequest(host.sendRequest.bind(host));
   safe(() => engine.on("ConstructibleAddedToMap", () => setTimeout(restoreWalls, SETTLE_MS)), null);
   safe(() => engine.on("PlayerTurnActivated", () => setTimeout(restoreWalls, SETTLE_MS)), null);
+  listenForSettings();
   hookPlacementScreen();
   log("active: antiquated urban tiles are offered to Wonders");
   return true;
@@ -687,6 +713,8 @@ if (!G[KEY]) {
     set enabled(v) { state.enabled = !!v; },
     get enabled() { return state.enabled; },
     uninstall, eligiblePlotsFor, readTile, wallRestores, priceTile,
+    /** The player's options as this script holds them. */
+    settings: getSettings,
   };
   install();
 }

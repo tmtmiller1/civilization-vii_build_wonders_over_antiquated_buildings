@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Database>
+    <LocalizedText>
+        <Replace Tag="LOC_BWAB_NAME" Language="fr_FR"><Text>Bâtir des Merveilles sur des bâtiments désuets</Text></Replace>
+        <Replace Tag="LOC_BWAB_DESCRIPTION" Language="fr_FR"><Text>Permet de bâtir une Merveille sur une case urbaine dont tous les bâtiments datent d'un âge précédent. Choisissez la case sur l'écran de placement de la Merveille : les anciens bâtiments sont rasés, les remparts restent, les citoyens déplacés sont à placer vous-même via l'invite habituelle de Croissance de ville, et la Merveille s'élève sur un véritable district de Merveille. Si le jeu refuse finalement l'emplacement, la case est remise en état. Les données du jeu restent telles quelles, et les Merveilles aussi. Dans Options, Extensions, vous pouvez désactiver le mod ou ne compter que les bâtiments d'il y a deux âges.</Text></Replace>
+        <Replace Tag="LOC_OPTIONS_GROUP_BWAB" Language="fr_FR"><Text>Merveilles sur bâtiments désuets</Text></Replace>
+        <Replace Tag="LOC_BWAB_OPTION_ENABLED" Language="fr_FR"><Text>Proposer les cases désuètes pour les Merveilles</Text></Replace>
+        <Replace Tag="LOC_BWAB_OPTION_ENABLED_DESCRIPTION" Language="fr_FR"><Text>Quand cette option est activée, l'écran de placement d'une Merveille propose aussi les cases urbaines dont tous les bâtiments sont désuets, et en choisir une la libère pour la Merveille. Désactivez-la et vous ne verrez que les emplacements proposés par le jeu. Une Merveille déjà placée de cette façon se poursuit normalement.</Text></Replace>
+        <Replace Tag="LOC_BWAB_OPTION_RULE" Language="fr_FR"><Text>Désuet signifie</Text></Replace>
+        <Replace Tag="LOC_BWAB_OPTION_RULE_EARLIER" Language="fr_FR"><Text>D'un âge précédent</Text></Replace>
+        <Replace Tag="LOC_BWAB_OPTION_RULE_TWO_AGES" Language="fr_FR"><Text>D'il y a deux âges</Text></Replace>
+        <Replace Tag="LOC_BWAB_OPTION_RULE_DESCRIPTION" Language="fr_FR"><Text>Les bâtiments qui comptent comme désuets. D'un âge précédent : une case est proposée quand chacun de ses bâtiments date d'un âge précédent. D'il y a deux âges : seuls comptent les bâtiments d'il y a deux âges. À l'âge moderne, une case de bâtiments de l'Antiquité est donc proposée, mais pas une case avec un bâtiment de l'âge de l'exploration, et à l'âge de l'exploration vous ne verrez que les emplacements proposés par le jeu. Un bâtiment intemporel tient toujours sa case à l'écart de la liste, et les remparts restent dans tous les cas.</Text></Replace>
+    </LocalizedText>
+</Database>

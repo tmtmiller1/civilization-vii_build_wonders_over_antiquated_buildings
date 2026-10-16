@@ -4,6 +4,8 @@
 declare const _default: any;
 export default _default;
 
-// core/ui/dialog-box/manager-dialog-box.js: the confirmation dialog the mod shows before clearing.
-export const DialogBoxManager: any;
-export const DialogBoxAction: any;
+// core/ui/options/model-options.js and options-helpers.js: the Options screen's model, for ui/bwab-options.js.
+export const CategoryType: any;
+export const OptionType: any;
+export const Options: any;
+export const CategoryData: any;

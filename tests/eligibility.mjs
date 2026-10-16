@@ -8,7 +8,9 @@
 // docs/RECIPE.md's business.
 
 import assert from "node:assert/strict";
-import { evaluateTile, eligibleTiles, isOutdated, describeVerdict, REASON } from "../lib/bwab-eligibility.js";
+import {
+  evaluateTile, eligibleTiles, isOutdated, describeVerdict, unreadRule, REASON, UNREAD_TABLES,
+} from "../lib/bwab-eligibility.js";
 
 const AGE = "AGE_EXPLORATION";
 const PREV = "AGE_ANTIQUITY";
@@ -169,6 +171,105 @@ test("a damaged outdated building is still eligible but is called out", () => {
   assert.equal(v.eligible, true);
   assert.equal(v.notes.length, 1);
   assert.match(v.notes[0], /BUILDING_BATH is damaged/);
+});
+
+// the stricter rule from the Options screen: two ages back
+
+const ORDER = ["AGE_ANTIQUITY", "AGE_EXPLORATION", "AGE_MODERN"];
+const MODERN = "AGE_MODERN";
+const TWO_BACK = { agesBack: 2, ageOrder: ORDER };
+
+test("two ages back: an Antiquity tile in the Modern age is eligible", () => {
+  const v = evaluateTile(urban(c({ type: "BUILDING_LIBRARY", age: "AGE_ANTIQUITY" })), MODERN, TWO_BACK);
+  assert.equal(v.eligible, true);
+  assert.deepEqual(v.outdated, ["BUILDING_LIBRARY"]);
+});
+
+test("two ages back: an Exploration building in the Modern age blocks the tile and is named", () => {
+  const v = evaluateTile(
+    urban(c({ type: "BUILDING_LIBRARY", age: "AGE_ANTIQUITY" }), c({ type: "BUILDING_BANK", age: "AGE_EXPLORATION" })),
+    MODERN, TWO_BACK,
+  );
+  assert.equal(v.eligible, false);
+  assert.equal(v.reason, REASON.TOO_RECENT);
+  assert.deepEqual(v.blockers, ["BUILDING_BANK"]);
+});
+
+test("two ages back: in the Exploration age nothing is far enough back", () => {
+  const v = evaluateTile(urban(c({ age: "AGE_ANTIQUITY" })), "AGE_EXPLORATION", TWO_BACK);
+  assert.equal(v.eligible, false);
+  assert.equal(v.reason, REASON.TOO_RECENT);
+});
+
+test("two ages back: Ageless and current-age keep their own reasons, walls are still kept", () => {
+  const ageless = evaluateTile(urban(c({ age: "AGE_ANTIQUITY", ageless: true })), MODERN, TWO_BACK);
+  assert.equal(ageless.reason, REASON.AGELESS);
+  const current = evaluateTile(urban(c({ age: MODERN })), MODERN, TWO_BACK);
+  assert.equal(current.reason, REASON.CURRENT_AGE);
+  const walled = evaluateTile(
+    urban(c({ age: "AGE_ANTIQUITY" }), c({ type: "BUILDING_DEFENSIVE_FORTIFICATIONS", age: MODERN, existingDistrictOnly: true })),
+    MODERN, TWO_BACK,
+  );
+  assert.equal(walled.eligible, true);
+  assert.deepEqual(walled.walls, ["BUILDING_DEFENSIVE_FORTIFICATIONS"]);
+});
+
+test("two ages back: an age missing from the order blocks rather than guessing", () => {
+  const unknownAge = evaluateTile(urban(c({ age: "AGE_MYSTERY" })), MODERN, TWO_BACK);
+  assert.equal(unknownAge.reason, REASON.UNKNOWN_AGE);
+  const noOrder = evaluateTile(urban(c({ age: "AGE_ANTIQUITY" })), MODERN, { agesBack: 2 });
+  assert.equal(noOrder.reason, REASON.UNKNOWN_AGE);
+  const notNow = evaluateTile(urban(c({ age: "AGE_ANTIQUITY" })), "AGE_FUTURE", TWO_BACK);
+  assert.equal(notNow.reason, REASON.UNKNOWN_AGE);
+});
+
+test("one age back, or no rule at all, is the shipped rule and needs no age order", () => {
+  for (const rule of [undefined, {}, { agesBack: 1 }, { agesBack: 1, ageOrder: [] }]) {
+    assert.equal(evaluateTile(urban(c({ age: "AGE_EXPLORATION" })), MODERN, rule).eligible, true);
+    assert.equal(evaluateTile(urban(c({ age: MODERN })), MODERN, rule).reason, REASON.CURRENT_AGE);
+  }
+});
+
+test("isOutdated follows the rule it is given", () => {
+  assert.equal(isOutdated(c({ age: "AGE_EXPLORATION" }), MODERN), true);
+  assert.equal(isOutdated(c({ age: "AGE_EXPLORATION" }), MODERN, TWO_BACK), false);
+  assert.equal(isOutdated(c({ age: "AGE_ANTIQUITY" }), MODERN, TWO_BACK), true);
+});
+
+// Wonders the mod leaves out: rows shaped as the compiled 1.5.0 gameplay database holds them
+
+const noRows = () => false;
+const rowsIn = (...tables) => (table) => tables.includes(table);
+
+test("a Wonder whose every rule the mod checks isn't left out", () => {
+  const def = { ConstructibleType: "WONDER_ANGKOR_WAT", AdjacentRiver: 1, AdjacentLake: 0, RequiresAppealPlacement: 0, RiverPlacement: null };
+  assert.equal(unreadRule(def, { MaxWorldInstances: 1, BuildOnFrontier: 0 }, noRows), null);
+  assert.equal(unreadRule(def, null, noRows), null);
+});
+
+test("lake adjacency and appeal leave a Wonder out", () => {
+  assert.equal(unreadRule({ ConstructibleType: "WONDER_SHWEDAGON_ZEDI_DAW", AdjacentLake: 1 }, {}, noRows), "AdjacentLake");
+  assert.equal(unreadRule({ RequiresAppealPlacement: 1 }, {}, noRows), "RequiresAppealPlacement");
+});
+
+test("river placement leaves the Statue of Liberty out", () => {
+  assert.equal(unreadRule({ ConstructibleType: "WONDER_STATUE_OF_LIBERTY", RiverPlacement: "ANCHORED" }, {}, noRows), "RiverPlacement");
+});
+
+test("a feature or resource row leaves a Wonder out, Ubudiah Mosque's wet feature class among them", () => {
+  const ubudiah = { ConstructibleType: "WONDER_UBUDIAH_MOSQUE" };
+  assert.equal(unreadRule(ubudiah, {}, rowsIn("Constructible_RequiredFeatureClasses")), "Constructible_RequiredFeatureClasses");
+  for (const table of UNREAD_TABLES) assert.equal(unreadRule({}, {}, rowsIn(table)), table);
+  assert.equal(unreadRule({}, {}, rowsIn("Constructible_ValidTerrains", "Constructible_ValidBiomes")), null);
+});
+
+test("BuildOnFrontier leaves Rila Monastery out (it can't stand next to a district)", () => {
+  const rila = { ConstructibleType: "WONDER_RILA_MONASTERY", AdjacentLake: 0, RequiresAppealPlacement: 0, RiverPlacement: null };
+  assert.equal(unreadRule(rila, { ConstructibleType: "WONDER_RILA_MONASTERY", MaxWorldInstances: 1, BuildOnFrontier: 1 }, noRows), "BuildOnFrontier");
+});
+
+test("a missing Constructibles row leaves the Wonder out", () => {
+  assert.equal(unreadRule(null, null, noRows), "Constructibles");
 });
 
 // collection + description

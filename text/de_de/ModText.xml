@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Database>
+    <LocalizedText>
+        <Replace Tag="LOC_BWAB_NAME" Language="de_DE"><Text>Wunder über veralteten Gebäuden errichten</Text></Replace>
+        <Replace Tag="LOC_BWAB_DESCRIPTION" Language="de_DE"><Text>Erlaubt den Bau eines Wunders auf einem Stadt-Geländefeld, dessen Gebäude alle aus einem früheren Zeitalter stammen. Das Geländefeld wird im Platzierungsbildschirm des Wunders gewählt: Die alten Gebäude werden abgerissen, die Mauern bleiben stehen, die verdrängten Bürger platziert Ihr selbst über die übliche Aufforderung „Stadt vergrößern“, und das Wunder entsteht in einem echten Wunder-Bezirk. Lehnt das Spiel den Standort doch ab, wird das Geländefeld wiederhergestellt. Die Spieldaten bleiben unverändert, die Wunder also genau so, wie das Spiel sie mitbringt. Unter Optionen, Add-Ons lässt sich die Mod ausschalten oder auf Gebäude von vor zwei Zeitaltern beschränken.</Text></Replace>
+        <Replace Tag="LOC_OPTIONS_GROUP_BWAB" Language="de_DE"><Text>Wunder über veralteten Gebäuden</Text></Replace>
+        <Replace Tag="LOC_BWAB_OPTION_ENABLED" Language="de_DE"><Text>Veraltete Geländefelder für Wunder anbieten</Text></Replace>
+        <Replace Tag="LOC_BWAB_OPTION_ENABLED_DESCRIPTION" Language="de_DE"><Text>Ist dies aktiviert, bietet der Platzierungsbildschirm eines Wunders auch Stadt-Geländefelder an, deren Gebäude alle veraltet sind, und die Wahl eines solchen Feldes macht es für das Wunder frei. Ist es deaktiviert, seht Ihr nur die Standorte, die das Spiel selbst anbietet. Ein Wunder, das Ihr bereits so platziert habt, wird ganz normal weitergebaut.</Text></Replace>
+        <Replace Tag="LOC_BWAB_OPTION_RULE" Language="de_DE"><Text>Als veraltet gilt</Text></Replace>
+        <Replace Tag="LOC_BWAB_OPTION_RULE_EARLIER" Language="de_DE"><Text>Aus jedem früheren Zeitalter</Text></Replace>
+        <Replace Tag="LOC_BWAB_OPTION_RULE_TWO_AGES" Language="de_DE"><Text>Von vor zwei Zeitaltern</Text></Replace>
+        <Replace Tag="LOC_BWAB_OPTION_RULE_DESCRIPTION" Language="de_DE"><Text>Welche Gebäude als veraltet gelten. Aus jedem früheren Zeitalter: Ein Geländefeld wird angeboten, wenn jedes Gebäude darauf aus einem früheren Zeitalter stammt. Von vor zwei Zeitaltern: Nur Gebäude von vor zwei Zeitaltern zählen. In der Moderne wird also ein Geländefeld mit Gebäuden aus der Antike angeboten, eines mit einem Gebäude aus dem Zeitalter der Erkundung aber nicht, und im Zeitalter der Erkundung seht Ihr nur die Standorte des Spiels selbst. Zeitlose Gebäude halten ein Geländefeld immer von der Liste fern, und Mauern bleiben in jedem Fall stehen.</Text></Replace>
+    </LocalizedText>
+</Database>

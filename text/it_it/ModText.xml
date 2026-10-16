@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Database>
+    <LocalizedText>
+        <Replace Tag="LOC_BWAB_NAME" Language="it_IT"><Text>Costruire Meraviglie sopra edifici antiquati</Text></Replace>
+        <Replace Tag="LOC_BWAB_DESCRIPTION" Language="it_IT"><Text>Permette di costruire una Meraviglia su una casella urbana i cui edifici appartengono tutti a un'epoca precedente. Scegli la casella nella schermata di posizionamento della Meraviglia: i vecchi edifici vengono demoliti, le mura restano, i cittadini sfollati li sistemi tu con il consueto avviso di Crescita della città e la Meraviglia sorge su un vero distretto Meraviglia. Se alla fine il gioco rifiuta il sito, la casella torna com'era. I dati del gioco restano come sono, e così le Meraviglie. In Opzioni, Add-on puoi disattivare la mod o contare solo gli edifici di due epoche fa.</Text></Replace>
+        <Replace Tag="LOC_OPTIONS_GROUP_BWAB" Language="it_IT"><Text>Meraviglie sopra edifici antiquati</Text></Replace>
+        <Replace Tag="LOC_BWAB_OPTION_ENABLED" Language="it_IT"><Text>Offri caselle antiquate per le Meraviglie</Text></Replace>
+        <Replace Tag="LOC_BWAB_OPTION_ENABLED_DESCRIPTION" Language="it_IT"><Text>Quando è attiva, la schermata di posizionamento di una Meraviglia offre anche le caselle urbane i cui edifici sono tutti antiquati, e sceglierne una la libera per la Meraviglia. Se la disattivi, vedrai solo i siti offerti dal gioco stesso. Una Meraviglia già posizionata in questo modo prosegue normalmente.</Text></Replace>
+        <Replace Tag="LOC_BWAB_OPTION_RULE" Language="it_IT"><Text>Antiquato significa</Text></Replace>
+        <Replace Tag="LOC_BWAB_OPTION_RULE_EARLIER" Language="it_IT"><Text>Di qualsiasi epoca precedente</Text></Replace>
+        <Replace Tag="LOC_BWAB_OPTION_RULE_TWO_AGES" Language="it_IT"><Text>Di due epoche fa</Text></Replace>
+        <Replace Tag="LOC_BWAB_OPTION_RULE_DESCRIPTION" Language="it_IT"><Text>Quali edifici contano come antiquati. Di qualsiasi epoca precedente: una casella viene offerta quando ogni edificio su di essa è di un'epoca precedente. Di due epoche fa: contano solo gli edifici di due epoche fa, quindi nell'Epoca moderna viene offerta una casella con edifici dell'Epoca antica ma non una con un edificio dell'Epoca delle esplorazioni, e nell'Epoca delle esplorazioni vedrai solo i siti del gioco stesso. Un edificio senza epoca tiene sempre la sua casella fuori dalla lista, e le mura restano in ogni caso.</Text></Replace>
+    </LocalizedText>
+</Database>

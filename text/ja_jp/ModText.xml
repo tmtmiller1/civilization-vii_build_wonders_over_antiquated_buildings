@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Database>
+    <LocalizedText>
+        <Replace Tag="LOC_BWAB_NAME" Language="ja_JP"><Text>旧時代の建造物の上に遺産を建設</Text></Replace>
+        <Replace Tag="LOC_BWAB_DESCRIPTION" Language="ja_JP"><Text>すべての建造物が前の時代のものである市街タイルに遺産を建設できるようにします。遺産の配置画面でそのタイルを選ぶと、古い建造物は取り壊され、防壁は残り、立ち退いた市民はいつもの「都市の成長」の画面で自分で配置でき、遺産は本物の遺産区域に建ちます。それでもゲームがその場所を拒否した場合、タイルは元に戻ります。ゲームのデータは変わらないので、遺産もそのままです。オプションの「追加コンテンツ」で、このMODをオフにしたり、2つ前の時代の建造物だけを対象にしたりできます。</Text></Replace>
+        <Replace Tag="LOC_OPTIONS_GROUP_BWAB" Language="ja_JP"><Text>旧時代の建造物の上に遺産を建設</Text></Replace>
+        <Replace Tag="LOC_BWAB_OPTION_ENABLED" Language="ja_JP"><Text>旧時代のタイルを遺産用に提示する</Text></Replace>
+        <Replace Tag="LOC_BWAB_OPTION_ENABLED_DESCRIPTION" Language="ja_JP"><Text>オンにすると、遺産の配置画面に、すべての建造物が旧時代のものである市街タイルも表示され、選ぶとそのタイルが遺産のために空けられます。オフにすると、ゲーム本来の候補地だけが表示されます。すでにこの方法で配置した遺産は、通常どおり建設が続きます。</Text></Replace>
+        <Replace Tag="LOC_BWAB_OPTION_RULE" Language="ja_JP"><Text>旧時代の基準</Text></Replace>
+        <Replace Tag="LOC_BWAB_OPTION_RULE_EARLIER" Language="ja_JP"><Text>前のどの時代でも</Text></Replace>
+        <Replace Tag="LOC_BWAB_OPTION_RULE_TWO_AGES" Language="ja_JP"><Text>2つ前の時代</Text></Replace>
+        <Replace Tag="LOC_BWAB_OPTION_RULE_DESCRIPTION" Language="ja_JP"><Text>どの建造物を旧時代のものとみなすかを選びます。「前のどの時代でも」：タイル上のすべての建造物が前の時代のものなら、そのタイルが提示されます。「2つ前の時代」：2つ前の時代の建造物だけが対象です。近代では古代の建造物のタイルは提示されますが、探検の時代の建造物があるタイルは提示されません。探検の時代には、ゲーム本来の候補地だけが表示されます。時代を問わない建造物があるタイルは常にリストから外れ、防壁はどちらの場合も残ります。</Text></Replace>
+    </LocalizedText>
+</Database>

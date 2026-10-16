@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Database>
+    <LocalizedText>
+        <Replace Tag="LOC_BWAB_NAME" Language="es_ES"><Text>Construir Maravillas sobre edificios anticuados</Text></Replace>
+        <Replace Tag="LOC_BWAB_DESCRIPTION" Language="es_ES"><Text>Permite construir una Maravilla en una casilla urbana cuyos edificios sean todos de una era anterior. Elige la casilla en la pantalla de colocación de la Maravilla: los edificios antiguos se derriban, las murallas se quedan, a los ciudadanos desplazados los colocas tú mediante el aviso habitual de Crecimiento de ciudad y la Maravilla se alza en un auténtico distrito de Maravilla. Si al final el juego rechaza el lugar, la casilla vuelve a quedar como estaba. Los datos del juego no cambian, así que las Maravillas siguen exactamente igual. En Opciones, Complementos puedes desactivar el mod o contar solo los edificios de hace dos eras.</Text></Replace>
+        <Replace Tag="LOC_OPTIONS_GROUP_BWAB" Language="es_ES"><Text>Maravillas sobre edificios anticuados</Text></Replace>
+        <Replace Tag="LOC_BWAB_OPTION_ENABLED" Language="es_ES"><Text>Ofrecer casillas anticuadas para Maravillas</Text></Replace>
+        <Replace Tag="LOC_BWAB_OPTION_ENABLED_DESCRIPTION" Language="es_ES"><Text>Con esta opción activada, la pantalla de colocación de una Maravilla también ofrece casillas urbanas cuyos edificios son todos anticuados, y al elegir una se despeja para la Maravilla. Si la desactivas, solo verás los lugares que ofrece el propio juego. Una Maravilla que ya hayas colocado así se sigue construyendo con normalidad.</Text></Replace>
+        <Replace Tag="LOC_BWAB_OPTION_RULE" Language="es_ES"><Text>Anticuado significa</Text></Replace>
+        <Replace Tag="LOC_BWAB_OPTION_RULE_EARLIER" Language="es_ES"><Text>De cualquier era anterior</Text></Replace>
+        <Replace Tag="LOC_BWAB_OPTION_RULE_TWO_AGES" Language="es_ES"><Text>De hace dos eras</Text></Replace>
+        <Replace Tag="LOC_BWAB_OPTION_RULE_DESCRIPTION" Language="es_ES"><Text>Qué edificios cuentan como anticuados. De cualquier era anterior: se ofrece una casilla cuando todos sus edificios son de una era anterior. De hace dos eras: solo cuentan los edificios de hace dos eras, así que en la Modernidad se ofrece una casilla con edificios de la Antigüedad pero no una con un edificio de los Descubrimientos, y en los Descubrimientos solo verás los lugares del propio juego. Los edificios que no envejecen siempre dejan una casilla fuera de la lista, y las murallas se quedan en cualquier caso.</Text></Replace>
+    </LocalizedText>
+</Database>
