@@ -108,7 +108,5 @@ Watched in a game on 2026-10-15. The list stays as what a run has to cover after
 5. Cancel on the Options screen puts back what was there on opening.
 6. The production list stays as quick as before with the list open (the read happens once, not per item).
 
-The same lab game can take three placement checks that have nothing to do with the options: Rila Monastery shows only
-the game's own sites, the lake-adjacency comparison for Shwedagon Zedi Daw and Muzibu Azaala Mpanga, and whether an
-urban tile can hold a wet feature (Ubudiah Mosque). Each is written out step by step at the end of
-[RECIPE.md](RECIPE.md), under "What is still open".
+The placement checks for Rila Monastery, the lake Wonders and Ubudiah Mosque have nothing to do with the options;
+they're the `pb27` run at the end of [RECIPE.md](RECIPE.md), under "What is still open".

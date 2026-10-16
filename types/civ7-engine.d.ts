@@ -8,6 +8,7 @@ declare const Locale: any;
 declare const MapConstructibles: any;
 declare const Constructibles: any;
 declare const Districts: any;
+declare const MapCities: any;
 declare const GameplayMap: any;
 declare const GameInfo: any;
 declare const Cities: any;

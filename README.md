@@ -51,7 +51,7 @@ count is unchanged once they are placed.*
 
 Antiquated means a previous age and not Ageless, or two ages back if you pick that in the options below. The engine
 enforces none of this on its own; left alone it offers any terrain-valid urban tile whatever stands on it. So this
-rule is the only thing that decides what is ever cleared. It lives in `lib/bwab-eligibility.js` with 36 tests.
+rule is the only thing that decides what is ever cleared. It lives in `lib/bwab-eligibility.js` with 45 tests.
 
 ## Options
 
@@ -83,21 +83,18 @@ refusal that says there is nowhere to put it is this mod's business.
 In one city, of 48 Wonders, 2 were buildable, 42 were refused for reasons that have nothing to do with any tile,
 and 4 were refused for want of a site. Only those last 4 are ones this mod can help with.
 
-The Wonder's own placement rules are then checked before a tile is offered for it: terrain, biome, no-feature,
-river (required or forbidden), adjacent terrain, adjacent district, adjacent mountain, adjacent constructible,
-invalid adjacent biomes, homeland or distant lands, and a required constructible in the settlement. A rule the mod
-doesn't evaluate leaves that Wonder out rather than guessing. In the 1.5.0 data that's four Wonders on land:
-Ubudiah Mosque, which has to stand on a wet feature such as a marsh or an oasis; Shwedagon Zedi Daw and Muzibu
-Azaala Mpanga, which have to stand beside a lake; and Rila Monastery, which can't stand next to a district, when
-nearly every urban tile has one beside it. Battersea Power Station is left out too. Its data carries the
-next-to-land rule that the coast Wonders use, and the mod leaves out every Wonder with that rule. The appeal rule,
-the other feature tables (required, valid or invalid features) and the resource table would leave a Wonder out the
-same way, though no Wonder uses them in 1.5.0. So the mod sometimes offers less than the game would allow.
+Every Wonder's own placement rules are then checked tile by tile, from the game's data: terrain, biome, the
+feature it needs or can't have, a resource, river and lake rules, homeland or distant lands, what the six
+neighbouring tiles hold (terrain, a district, a mountain, a lake, a building, the capital, a resource, land beside
+water) and a building the settlement must already have. A Wonder is offered every antiquated tile that meets its
+rules, and only those. So Rila Monastery gets the antiquated tiles at the edge of a city that have no urban tile or
+city center beside them. Shwedagon Zedi Daw and Muzibu Azaala Mpanga get the ones beside a lake, Ubudiah Mosque
+the ones on a wet feature such as a marsh, and Battersea Power Station the ones beside Coast.
 
-The Wonders that stand on Coast follow placement rules the game keeps to itself. Of the ones you can build once a
-tile is antiquated, Nan Madol is offered a coastal urban tile (a Lighthouse or Fishing Quay) only when the game
-already accepts it on a bare coast tile of the same city. Hale o Keawe and Havana Harbor carry the next-to-land rule
-and are left out, and so is the Statue of Liberty, which also has a river-placement rule the mod doesn't read.
+The Wonders that stand on Coast follow placement rules the game keeps to itself, so for a coastal urban tile (a
+Lighthouse or Fishing Quay) the game is asked as well. Nan Madol, Hale o Keawe, Havana Harbor and the Statue of
+Liberty are offered such a tile when the game already accepts the Wonder on a bare coast tile of the same city and
+the tile meets the rules the data does spell out.
 
 ## If the game refuses the site after all
 
@@ -157,9 +154,12 @@ with no prompt of the mod's own, the yield preview on the hex and in the panel, 
 with nothing lost, a live LAN game, and the tile going from its buildings straight to the Wonder's construction
 site with no empty ground in between. Each step and the run behind it is in [docs/RECIPE.md](docs/RECIPE.md).
 
-The two options and leaving out Rila Monastery were watched in a game on 2026-10-15: the switch and the age rule
-in Options > Add-ons do what their labels say, and Rila Monastery's placement screen shows only the game's own
-sites. What a run covers is listed at the end of [docs/OPTIONS.md](docs/OPTIONS.md).
+The two options were watched in a game on 2026-10-15: the switch and the age rule in Options > Add-ons do what
+their labels say. What a run covers is listed at the end of [docs/OPTIONS.md](docs/OPTIONS.md).
+
+The per-tile check for every Wonder rule is built and covered by the offline tests. The in-game comparison with the
+game's own sites, Wonder by Wonder, is the `pb27` run in [docs/RECIPE.md](docs/RECIPE.md), under "What is still
+open".
 
 ## Layout
 
@@ -169,7 +169,7 @@ ui/bwab-clear-and-build.js          the mod: placement hooks, the clear, walls, 
 ui/bwab-settings.js                 the two settings: defaults, read once and kept, the guarded write
 ui/bwab-options.js                  the two rows in Options > Add-ons
 ui/settings-keeper.js               Tower Settings Keeper BUILD 112, copied unchanged
-lib/bwab-eligibility.js             the tile rule and the unread Wonder rules, 36 tests
+lib/bwab-eligibility.js             the tile rule and every Wonder placement rule, 45 tests
 text/en_us/ModText.xml              name, description and the Options text
 text/<lang>/ModText.xml             the same text in each of 11 other languages
 tests/eligibility.mjs               the rule's tests

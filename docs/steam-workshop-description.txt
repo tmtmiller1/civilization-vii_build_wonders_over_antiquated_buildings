@@ -10,7 +10,7 @@ A city that filled its center in Antiquity has nowhere left to put a Wonder. Thi
 [*]Clearing a tile takes its district down, and walls go with it; the mod puts them back on the Wonder's district when it lands.
 [*]One citizen per building that housed one comes back as a pending population point once the Wonder is standing, and the game's own Grow City prompt asks where each one settles: a rural tile or a specialist seat, wherever you like.
 [*]The mod decides where a Wonder may go, not whether it may be built. A Wonder that is locked, not yet unlocked, or already standing somewhere in the world stays refused, exactly as the base game refuses it. The mod only answers the one refusal that means there is nowhere to put it.
-[*]The Wonder's own rules still decide. Terrain, biome, river, no-feature, adjacent terrain, adjacent district, adjacent mountain, adjacent constructible, invalid adjacent biomes, homeland or distant lands, and a required constructible in the settlement are all checked before a tile is offered for a given Wonder. A rule the mod doesn't evaluate leaves that Wonder out rather than guessing. Today that's Ubudiah Mosque, which has to stand on a wet feature such as a marsh; Shwedagon Zedi Daw and Muzibu Azaala Mpanga, which have to stand beside a lake; Rila Monastery, which can't stand next to a district; and Battersea Power Station. Of the Coast Wonders you can build once a tile is antiquated, Nan Madol is offered a coastal urban tile only when the game already accepts it on a bare coast tile of the same city, and the others are left out. So the mod sometimes offers less than the game would allow.
+[*]The Wonder's own rules still decide, tile by tile: terrain, biome, the feature it needs, river and lake rules, homeland or distant lands, what stands on the six tiles around it, and any building the settlement must have. Rila Monastery gets the antiquated tiles with no urban tile or city center beside them, Shwedagon Zedi Daw and Muzibu Azaala Mpanga the ones beside a lake, Ubudiah Mosque the ones on a wet feature, and Battersea Power Station the ones beside Coast. The Coast Wonders get a coastal urban tile when the game already accepts them on a bare coast tile of the same city.
 [*]A refusal costs you nothing. The game will not say whether a Wonder fits a tile until the tile is empty, and it enforces rules no mod can read in advance. If it turns the cleared site down, the mod puts the buildings and walls back within a few seconds. No citizens are displaced, because they are only added once the Wonder is standing.
 [*]The placement screen shows what the swap is worth: the Wonder's yields, less the yields of the buildings that would go, plus the maintenance they would stop costing.
 [*]Two settings in Options, Add-ons: a switch for the whole mod, and whether antiquated means any earlier age (the default) or two ages back, so that in the Modern age only Antiquity buildings count. They hold across a restart and stay out of your save.
@@ -42,10 +42,6 @@ English, German, Spanish, French, Italian, Japanese, Korean, Polish, Portuguese 
 [*]The yield preview is a first-order figure. It counts the Wonder's own yields, the yields of the buildings that would go, and their maintenance. Yields a Wonder grants only under some condition, and adjacency the old buildings were receiving, are not in it.
 [*]The AI does not do this. Opponents build Wonders exactly as they always have; the mod adds sites to your placement screen only.
 [*]Clearing happens when you place the Wonder, not when it finishes. The buildings come back only if the game refuses the site.
-[/list]
-[h2]Still coming[/h2]
-[list]
-[*]A check for Shwedagon Zedi Daw and Muzibu Azaala Mpanga, which have to stand beside a lake, so they're offered too. Ubudiah Mosque follows if an urban tile can hold a wet feature at all.
 [/list]
 [h2]Source and documentation[/h2]
 [list]

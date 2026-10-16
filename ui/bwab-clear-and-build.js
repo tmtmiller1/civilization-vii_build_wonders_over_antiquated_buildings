@@ -19,8 +19,9 @@
 // on an empty tile.
 //
 // Which tiles: lib/bwab-eligibility.js. Which Wonders for a tile: the Wonder's own placement rules,
-// evaluated here; a rule the mod reads but doesn't evaluate (unreadRule in the same lib file) leaves the Wonder
-// out rather than guessing.
+// every one of them, evaluated per tile by fitsPlacement in the same lib file from what this script
+// reads off the map. A water tile is also put to the engine, which keeps the coast Wonders' rules to
+// itself.
 //
 // The player's two options (ui/bwab-settings.js, docs/OPTIONS.md) are read once and kept in memory:
 // the switch decides whether any tile is offered, the rule how old a building has to be.
@@ -28,7 +29,7 @@
 // One globalThis key with a kill switch and an uninstall that restores the originals; every engine
 // call guarded; nothing thrown into an engine callback; imports under the mod id.
 
-import { evaluateTile, unreadRule } from "/tower-build-wonders-over-antiquated-buildings/lib/bwab-eligibility.js";
+import { evaluateTile, fitsPlacement, PLACEMENT_TABLES } from "/tower-build-wonders-over-antiquated-buildings/lib/bwab-eligibility.js";
 import {
   SETTINGS_CHANGED_EVENT, getSettings, refreshSettings
 } from "/tower-build-wonders-over-antiquated-buildings/ui/bwab-settings.js";
@@ -116,7 +117,10 @@ function describeOccupant(inst) {
  * @property {boolean|null} river
  * @property {boolean} water
  * @property {boolean} lake
+ * @property {boolean|null} adjacentToLand The engine's own answer; null when it couldn't say.
  * @property {string} feature
+ * @property {string} featureClass
+ * @property {string} resource
  */
 
 /** @param {number} plot @returns {Tile|null} Everything the rules need about one plot. */
@@ -140,28 +144,58 @@ function readTile(plot) {
       river: safe(() => !!GameplayMap.isRiver(loc.x, loc.y), null),
       water: safe(() => !!GameplayMap.isWater(loc.x, loc.y), true),
       lake: safe(() => !!GameplayMap.isLake(loc.x, loc.y), true),
-      feature: safe(() => {
-        const f = GameplayMap.getFeatureType(loc.x, loc.y);
-        return f == null || f < 0 ? "" : String(GameInfo.Features.lookup(f)?.FeatureType || "");
-      }, ""),
+      adjacentToLand: safe(() => !!GameplayMap.isAdjacentToLand(loc.x, loc.y), null),
+      feature: featureAt(loc.x, loc.y).type, featureClass: featureAt(loc.x, loc.y).cls,
+      resource: resourceAt(loc.x, loc.y),
     };
   }, null);
 }
 
-/** @param {Tile} tile */
+/** @param {number} x @param {number} y @returns {{type:string, cls:string}} The feature there and its class. */
+function featureAt(x, y) {
+  return safe(() => {
+    const f = GameplayMap.getFeatureType(x, y);
+    const row = f == null || f < 0 ? null : GameInfo.Features.lookup(f);
+    return { type: String((row && row.FeatureType) || ""), cls: String((row && row.FeatureClassType) || "") };
+  }, { type: "", cls: "" });
+}
+/** @param {number} x @param {number} y @returns {string} The ResourceType there, or "". */
+function resourceAt(x, y) {
+  return safe(() => {
+    const r = GameplayMap.getResourceType(x, y);
+    return r == null || r < 0 ? "" : String(GameInfo.Resources.lookup(r)?.ResourceType || "");
+  }, "");
+}
+/** @param {*} loc @returns {boolean} Whether the plot is the city center of its owner's capital. */
+function isCapitalCenter(loc) {
+  return safe(() => {
+    const city = MapCities.getCity(loc.x, loc.y);
+    if (!city) return false;
+    const cap = Players.get(city.owner).Cities.getCapital();
+    return !!cap && cap.id === city.id && cap.owner === city.owner;
+  }, false);
+}
+
+/** @param {{x:number, y:number}} tile @returns {import("../lib/bwab-eligibility.js").NeighbourInfo[]} */
 function neighbours(tile) {
   const out = [];
   for (let dir = 0; dir < 6; dir++) {
     const n = safe(() => GameplayMap.getAdjacentPlotLocation({ x: tile.x, y: tile.y }, dir), null);
     if (!n) continue;
+    const dd = safe(() => GameInfo.Districts.lookup(Districts.getAtLocation(n).type), null);
     out.push({
       terrain: terrainAt(n.x, n.y),
       biome: safe(() => String(GameInfo.Biomes.lookup(GameplayMap.getBiomeType(n.x, n.y)).BiomeType), ""),
-      district: safe(() => String(GameInfo.Districts.lookup(Districts.getAtLocation(n).type).DistrictType), ""),
+      district: dd ? String(dd.DistrictType || "") : "",
+      districtClass: dd ? String(dd.DistrictClass || "") : "",
       types: safe(() => {
         /** @type {*[]} */ const ids = MapConstructibles.getConstructibles(n.x, n.y) || [];
         return ids.map((c) => String(defOf(Constructibles.getByComponentID(c).type).ConstructibleType));
       }, []),
+      water: safe(() => !!GameplayMap.isWater(n.x, n.y), false),
+      lake: safe(() => !!GameplayMap.isLake(n.x, n.y), false),
+      resource: resourceAt(n.x, n.y),
+      capital: isCapitalCenter(n),
     });
   }
   return out;
@@ -178,34 +212,65 @@ function rowsFor(table, type, col) {
   }, []);
 }
 
+/** The column each placement table keys its values by. */
+const TABLE_COLUMNS = /** @type {Record<string, string>} */ ({
+  ValidTerrains: "TerrainType", ValidBiomes: "BiomeType", ValidFeatures: "FeatureType", RequiredFeatures: "FeatureType",
+  RequiredFeatureClasses: "FeatureClassType", InvalidFeatures: "FeatureType", ValidResources: "ResourceType",
+  InvalidAdjacentBiomes: "BiomeType",
+});
+
+/** @type {Map<string, import("../lib/bwab-eligibility.js").PlacementRules>} Per Wonder; data is fixed in a game. */
+const rulesCache = new Map();
+
 /**
- * The tile's own terrain, biome and feature against the Wonder's Constructible_Valid* rows.
- * @param {*} def @param {Tile} tile @param {*} cityID @returns {boolean}
+ * A Wonder's placement rules, read once from the game's tables.
+ * @param {*} def @returns {import("../lib/bwab-eligibility.js").PlacementRules}
  */
-function fitsGround(def, tile, cityID) {
-  if (tile.water && !fitsWater(def, tile, cityID)) return false;
+function rulesFor(def) {
   const t = String(def.ConstructibleType);
-  const terrains = rowsFor("Constructible_ValidTerrains", t, "TerrainType");
-  const biomes = rowsFor("Constructible_ValidBiomes", t, "BiomeType");
-  if (terrains.length && !terrains.includes(tile.terrain)) return false;
-  if (biomes.length && !biomes.includes(tile.biome)) return false;
-  return !(def.NoFeature && tile.feature);
+  const hit = rulesCache.get(t);
+  if (hit) return hit;
+  /** @type {Record<string, string[]>} */ const rows = {};
+  for (const table of PLACEMENT_TABLES) rows[table] = rowsFor("Constructible_" + table, t, TABLE_COLUMNS[table]);
+  const rules = { def, wonder: safe(() => GameInfo.Wonders.lookup(t), null), rows };
+  rulesCache.set(t, rules);
+  return rules;
 }
 
 /**
- * A water tile for one of the five Coast Wonders. Their placement rules live in the engine, not in any table,
- * and the Civilopedia's wording is not the engine's rule either: Nan Madol's tooltip says "Coast adjacent to
- * land, this land must be an Island", yet eight coast tiles beside island land in one empire were accepted by
- * the engine on none (`pb24`), while every city center there was off-island. So the gate is the engine's own
- * verdict: the Wonder must already be accepted on at least one bare coast tile of this city (its hidden rules
- * are then known to be satisfiable here), and this tile must pass the readable ones (adjacent to land, not a
- * Lake when `MustNotBeLake`). A refusal after that is still rolled back.
- * @param {*} def @param {Tile} tile @param {*} cityID @returns {boolean}
+ * The tile and its surroundings, as the rules read them.
+ * @param {Tile} tile @param {*} city @returns {import("../lib/bwab-eligibility.js").SiteInfo}
  */
-function fitsWater(def, tile, cityID) {
-  if (!safe(() => GameplayMap.isAdjacentToLand(tile.x, tile.y), false)) return false;
-  const w = safe(() => GameInfo.Wonders.lookup(def.ConstructibleType), null);
-  if (w && w.MustNotBeLake && tile.lake) return false;
+function siteOf(tile, city) {
+  const distant = safe(() => Players.get(GameContext.localPlayerID).isDistantLands({ x: tile.x, y: tile.y }), null);
+  return {
+    terrain: tile.terrain, biome: tile.biome, feature: tile.feature, featureClass: tile.featureClass,
+    resource: tile.resource, river: tile.river, water: tile.water, lake: tile.lake, adjacentToLand: tile.adjacentToLand,
+    distantLands: typeof distant === "boolean" ? distant : null,
+    neighbours: neighbours(tile),
+    countInSettlement: (need) => safe(() => {
+      let k = 0;
+      for (const id of city.Constructibles.getIds() || []) {
+        const d = defOf(Constructibles.getByComponentID(id).type);
+        if (d && d.ConstructibleType === need) k++;
+      }
+      return k;
+    }, 0),
+  };
+}
+
+/**
+ * A water tile for a Wonder that stands on Coast. Their placement rules live in the engine, not in any
+ * table, and the Civilopedia's wording is not the engine's rule either: Nan Madol's tooltip says "Coast
+ * adjacent to land, this land must be an Island", yet eight coast tiles beside island land in one empire
+ * were accepted by the engine on none (`pb24`), while every city center there was off-island. So the gate
+ * is the engine's own verdict: the Wonder must already be accepted on at least one bare coast tile of
+ * this city (its hidden rules are then known to be satisfiable here). The readable rules (adjacent to
+ * land, not a Lake under `MustNotBeLake`, the river placement) are then checked by fitsPlacement like
+ * any other. A refusal after that is still rolled back.
+ * @param {*} def @param {*} cityID @returns {boolean}
+ */
+function engineAcceptsOnWater(def, cityID) {
   const res = engineCanStart(cityID, { ConstructibleType: def.$index });
   const sites = res && res.ExpandUrbanPlots ? Array.from(res.ExpandUrbanPlots) : [];
   return !!(res && res.Success) && sites.some((p) => safe(() => {
@@ -215,78 +280,27 @@ function fitsWater(def, tile, cityID) {
 }
 
 /**
- * Homeland or distant lands, when the Wonder cares (Grand Bazaar must be at home, Havana Harbor abroad).
- * @param {*} def @param {Tile} tile @returns {boolean}
- */
-function fitsLands(def, tile) {
-  if (!def.RequiresHomeland && !def.RequiresDistantLands) return true;
-  const distant = safe(() => Players.get(GameContext.localPlayerID).isDistantLands({ x: tile.x, y: tile.y }), null);
-  if (distant === null) return false;
-  return def.RequiresDistantLands ? distant : !distant;
-}
-
-/**
- * The Wonder's river flags.
- * @param {*} def @param {Tile} tile @returns {boolean}
- */
-function fitsFlags(def, tile) {
-  if (def.AdjacentRiver && tile.river !== true) return false;
-  return !(def.NoRiver && tile.river);
-}
-
-/**
- * The Wonders-table rules that look at the six neighbors.
- * @param {*} def @param {*} w The Wonders row. @param {Tile} tile @returns {boolean}
- */
-function fitsNeighbours(def, w, tile) {
-  const ns = neighbours(tile);
-  if (def.AdjacentTerrain && !ns.some((n) => n.terrain === def.AdjacentTerrain)) return false;
-  if (def.AdjacentDistrict && !ns.some((n) => n.district === String(def.AdjacentDistrict))) return false;
-  if (nextToInvalidBiome(def, ns)) return false;
-  if (w.AdjacentToMountain && !ns.some((n) => n.terrain === "TERRAIN_MOUNTAIN")) return false;
-  return !w.AdjacentConstructible || ns.some((n) => n.types.includes(String(w.AdjacentConstructible)));
-}
-
-/**
- * Constructible_InvalidAdjacentBiomes: a neighbor in one of these biomes rules the tile out.
- * @param {*} def @param {Array<{biome:string}>} ns @returns {boolean}
- */
-function nextToInvalidBiome(def, ns) {
-  const bad = rowsFor("Constructible_InvalidAdjacentBiomes", String(def.ConstructibleType), "BiomeType");
-  return bad.length > 0 && ns.some((n) => bad.includes(n.biome));
-}
-
-/**
- * RequiredConstructibleInSettlement(Count): the settlement must already hold N of a type.
- * @param {*} w The Wonders row. @param {*} city @returns {boolean}
- */
-function fitsSettlement(w, city) {
-  if (!w.RequiredConstructibleInSettlement) return true;
-  const need = String(w.RequiredConstructibleInSettlement);
-  const have = safe(() => {
-    let k = 0;
-    for (const id of city.Constructibles.getIds() || []) {
-      const d = defOf(Constructibles.getByComponentID(id).type);
-      if (d && d.ConstructibleType === need) k++;
-    }
-    return k;
-  }, 0);
-  return have >= (w.RequiredConstructibleInSettlementCount || 1);
-}
-
-/**
- * A Wonder with a rule the mod reads but doesn't evaluate (lake adjacency, appeal, river placement, BuildOnFrontier,
- * a feature or resource table; lib/bwab-eligibility.js unreadRule) is left out before any tile is looked at.
+ * Does this Wonder's every placement rule accept this tile? Terrain, biome, the feature and resource
+ * tables, river and lake flags, homeland or distant lands, the six neighbours (terrain, district,
+ * biomes, mountain, constructible, lake, capital, resource, the frontier rule, land beside water) and the
+ * settlement's buildings, all from the game's own data. A water tile is also put to the engine.
  * @param {*} def @param {Tile} tile @param {*} city @param {*} cityID @returns {boolean}
  */
 function wonderFitsTile(def, tile, city, cityID) {
-  const t = String(def.ConstructibleType);
-  const w = safe(() => GameInfo.Wonders.lookup(t), null);
-  if (unreadRule(def, w, (table) => rowsFor(table, t, "ConstructibleType").length > 0)) return false;
-  if (!fitsGround(def, tile, cityID) || !fitsFlags(def, tile) || !fitsLands(def, tile)) return false;
-  if (!w) return true;
-  if (w.MustBeLake || w.AdjacentToLand) return false; // water Wonders
-  return fitsNeighbours(def, w, tile) && fitsSettlement(w, city);
+  if (tile.water && !engineAcceptsOnWater(def, cityID)) return false;
+  return fitsPlacement(rulesFor(def), siteOf(tile, city)).ok;
+}
+
+/**
+ * For a probe: the rules' verdict on any plot of a city, bare or not, with the rule it failed. The
+ * antiquated-tile check and the engine's water gate are left out, so a bare tile the engine itself
+ * offers can be compared with what the rules say about it.
+ * @param {*} cityID @param {*} def @param {number} plot @returns {{ok: boolean, failed: string|null}|null}
+ */
+function siteVerdict(cityID, def, plot) {
+  const tile = readTile(plot);
+  const city = safe(() => Cities.get(cityID), null);
+  return tile && city && def ? fitsPlacement(rulesFor(def), siteOf(tile, city)) : null;
 }
 
 // the injected plot set
@@ -712,7 +726,7 @@ if (!G[KEY]) {
     /** Kill switch: false makes every wrap pass straight through. */
     set enabled(v) { state.enabled = !!v; },
     get enabled() { return state.enabled; },
-    uninstall, eligiblePlotsFor, readTile, wallRestores, priceTile,
+    uninstall, eligiblePlotsFor, readTile, wallRestores, priceTile, siteVerdict,
     /** The player's options as this script holds them. */
     settings: getSettings,
   };

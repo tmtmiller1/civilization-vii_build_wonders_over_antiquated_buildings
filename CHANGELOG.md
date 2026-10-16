@@ -4,6 +4,15 @@ All notable changes to Build Wonders Over Antiquated Buildings are documented he
 versioning. The history of the routes that were tried before this design, and the probe runs behind them, is in
 `mod_ideas_tested/build_wonders_over_antiquated_buildings/CHANGELOG-2026-09-24-before-split.md`.
 
+## [Unreleased]
+
+- Every Wonder is now checked tile by tile against all of its placement rules, so the Wonders the mod used to skip
+  get the antiquated tiles that fit them. Rila Monastery is offered the ones with no urban tile or city center beside
+  them. Shwedagon Zedi Daw and Muzibu Azaala Mpanga get the ones beside a lake, Ubudiah Mosque the ones on a wet
+  feature such as a marsh, and Battersea Power Station the ones beside Coast. Hale o Keawe, Havana Harbor and the
+  Statue of Liberty are offered a coastal urban tile when the game already accepts them on a bare coast tile of the
+  same city, the way Nan Madol already was.
+
 ## [1.1.0] - 2026-10-15
 
 - Two settings in Options > Add-ons. **Offer antiquated tiles for Wonders** (on by default) switches the mod's offer

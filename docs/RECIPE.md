@@ -30,7 +30,7 @@ usual ones. Choose one, as you would an empty tile; the mod adds no prompt of it
 Wonder is queued there, and the game's own Grow City prompt asks you to place each displaced citizen (rural tile or
 specialist seat, wherever you like) before the turn can end.
 
-## What qualifies: the rule (`lib/bwab-eligibility.js`, 36 tests)
+## What qualifies: the rule (`lib/bwab-eligibility.js`, 45 tests)
 
 | Tile holds | Offered |
 |---|---|
@@ -45,17 +45,38 @@ Antiquated = previous age and not `AGELESS`. The engine itself enforces none of 
 terrain-valid urban tile whatever stands on it), so this rule is the only thing that decides what is ever cleared.
 The Options screen can make it stricter: "From two ages back" (`agesBack: 2`) counts a building only when its age is
 two or more places before the current one in `Ages.ChronologyIndex` order, and refuses the rest as `has-too-recent`.
-That and the master switch are in [OPTIONS.md](OPTIONS.md); neither has been watched in a game yet.
+That and the master switch are in [OPTIONS.md](OPTIONS.md); both were watched in a game on 2026-10-15.
 
-The Wonder's own placement rules are checked in script before a tile is offered for it: terrain, biome, no-feature
-(`NoFeature` against the tile's feature), river, adjacent terrain, adjacent district, adjacent mountain, adjacent
-constructible, invalid adjacent biomes, homeland or distant lands, and the required constructible in the settlement.
-The rest are read but not evaluated, and a Wonder that has one is left out before any tile is looked at
-(`unreadRule` in `lib/bwab-eligibility.js`, tested): lake adjacency (`AdjacentLake`), appeal placement
-(`RequiresAppealPlacement`), river placement (`RiverPlacement`), `Wonders.BuildOnFrontier`, any feature table
-(`Constructible_ValidFeatures`, `_RequiredFeatures`, `_RequiredFeatureClasses`, `_InvalidFeatures`) and
-`Constructible_ValidResources`. `wonderFitsTile` also leaves out every Wonder with `Wonders.AdjacentToLand` or
-`MustBeLake`, treating both as marks of a water Wonder.
+Every placement rule a Wonder carries is evaluated per tile by `fitsPlacement` in `lib/bwab-eligibility.js`
+(tested rule by rule in `tests/eligibility.mjs`), from what `siteOf` in the UI script reads off the map:
+
+| Rule | Read as |
+|---|---|
+| `Constructible_ValidTerrains`, `_ValidBiomes` | the tile's terrain and biome are listed |
+| `NoFeature`, `Constructible_ValidFeatures`, `_RequiredFeatures`, `_InvalidFeatures` | the tile's `FeatureType` |
+| `Constructible_RequiredFeatureClasses` (Ubudiah Mosque, `FEATURE_CLASS_WET`) | the feature's `FeatureClassType` |
+| `Constructible_ValidResources` | the tile's `ResourceType` |
+| `AdjacentRiver`, `NoRiver` | `GameplayMap.isRiver` |
+| `RiverPlacement` | `RIVER`: a river tile. `ANCHORED` and `OFF_COAST`: water beside land (the Statue of Liberty) |
+| `MustBeLake`, `MustNotBeLake` | `GameplayMap.isLake` on the tile |
+| `RequiresHomeland`, `RequiresDistantLands` | `isDistantLands` |
+| `AdjacentTerrain`, `AdjacentDistrict`, `Constructible_InvalidAdjacentBiomes` | the six neighbours |
+| `AdjacentLake` (Shwedagon Zedi Daw, Muzibu Azaala Mpanga) | a neighbour reads `isLake` |
+| `AdjacentToMountain`, `AdjacentConstructible`, `AdjacentCapital`, `AdjacentResource` | the six neighbours |
+| `BuildOnFrontier` (Rila Monastery, Vix) | no neighbour in an `URBAN`, `CITYCENTER` or `WONDER` district |
+| `AdjacentToLand` (Battersea Power Station and the coast Wonders) | water: `isAdjacentToLand`. Land: a land neighbour |
+| `RequiredConstructibleInSettlement(Count)` | the settlement's constructibles |
+
+`RequiresAppealPlacement` is the one column not evaluated. No Wonder carries it, and one that did would be refused
+every tile rather than guessed at.
+
+The frontier reading comes from the game's own text for the other constructible with `BuildOnFrontier`: the
+Monastery "must be placed on an existing Improvement, and cannot be placed adjacent to a District". An Improvement
+stands on a rural tile, usually among other rural tiles, so a rural tile can't be what "a District" means there. The
+Festival Grounds text says the same from the other side ("an existing Improvement ... adjacent to a District"). The
+classes are one constant, `FRONTIER_DISTRICT_CLASSES`; `pb27` checks it against the engine.
+
+A water tile is also put to the engine (`engineAcceptsOnWater`), because the coast Wonders keep rules of their own.
 
 These rows were read on 2026-10-15 from compiled gameplay databases, the engine's own record of what it loaded:
 
@@ -66,8 +87,8 @@ These rows were read on 2026-10-15 from compiled gameplay databases, the engine'
 | `other_peoples_mods_analysis/_debug-db/gameplay-copy.sqlite` | Modern, mod set not recorded, 2026-10-12 | 71 |
 
 An Antiquity game loads only the 27 Antiquity Wonders, so the later ones come from the two older copies. Every row
-below matches the 1.5.0 XML in `civilization_vii_1.5.0_game_files/` too. In the two ages when a tile can be
-antiquated, the mod leaves out:
+below matches the 1.5.0 XML in `civilization_vii_1.5.0_game_files/` too. These are the Wonders you can build while a
+tile is antiquated whose rules go beyond terrain and neighbours, and which needed reading the map more closely:
 
 | Wonder | Age | Source | Rule |
 |---|---|---|---|
@@ -77,14 +98,12 @@ antiquated, the mod leaves out:
 | Havana Harbor | Exploration | DLC `pirate-republic` | `Wonders.AdjacentToLand` and `MustNotBeLake`, a Coast Wonder |
 | Muzibu Azaala Mpanga | Modern | Base | `AdjacentLake` |
 | Ubudiah Mosque | Modern | DLC `asia-wonders` | `Constructible_RequiredFeatureClasses` = `FEATURE_CLASS_WET` ("Must be placed on Wet Terrain") |
-| Statue of Liberty | Modern | Base | `RiverPlacement="ANCHORED"`, and it's a Coast Wonder anyway |
+| Statue of Liberty | Modern | Base | `RiverPlacement="ANCHORED"`, a Coast Wonder |
 | Battersea Power Station | Modern | DLC `great-britain` | `Wonders.AdjacentToLand` on a land Wonder (`AdjacentTerrain` = `TERRAIN_COAST`) |
 
-Vix (DLC `gaul`) also carries `BuildOnFrontier`, but it's an Antiquity Wonder, when nothing is antiquated yet.
-Battersea Power Station was missing from the earlier reading of the XML: it's a land Wonder, and the `AdjacentToLand`
-line has left it out since 0.3.0. No Wonder in any of the three copies has `Constructible_ValidFeatures`,
-`_RequiredFeatures`, `_InvalidFeatures`, `NoFeature`, `RequiresAppealPlacement` or a resource row, so those checks
-don't leave any Wonder out today.
+Vix (DLC `gaul`) also carries `BuildOnFrontier`, but it's an Antiquity Wonder, when nothing is antiquated yet. No
+Wonder in any of the three copies has `Constructible_ValidFeatures`, `_RequiredFeatures`, `_InvalidFeatures`,
+`NoFeature`, `RequiresAppealPlacement` or a resource row.
 
 No Tower mod in the usual set changes a Wonder's placement. The 27 Antiquity Wonders' rows in `Constructibles`,
 `Wonders` and the nine `Constructible_*` placement tables (99 rows) are identical in the usual-set copy and the
@@ -219,61 +238,27 @@ confirmation of its own at the time, which a probe flag had skipped; both are go
 - A coast Wonder actually landing on a coastal urban tile. The gate needs the engine to accept that Wonder on
   some bare coast tile of the city first; no save to hand has one.
 - Whether any tile is ever refused now. If one is, the cost is the three-second empty hex, not a lost building.
-- Rila Monastery left out for `BuildOnFrontier`, built 2026-10-15. Watched the same day: in a game with Rila
-  Monastery unlocked, its placement screen shows only the game's own sites.
-- Lake adjacency (Shwedagon Zedi Daw, Muzibu Azaala Mpanga), not built. It's worth building only if the engine's
-  `AdjacentLake` test is "one of the six neighbours reads `GameplayMap.isLake`". The lab check that could prove that
-  wrong is below.
-- Ubudiah Mosque's wet feature, not built, because the data can't say whether an urban tile ever holds one. Five of
-  the six `FEATURE_CLASS_WET` features (Mangrove, Marsh, Oasis, Tundra Bog, Watering Hole) are `Removable` and
-  `AllowSettlement`; the sixth, Zhangjiajie, is an impassable natural wonder that never holds a district.
-  `District_RemovedFeatures` is empty in the 1.5.0 XML and in the compiled copy, and the only building with a feature
-  rule is the Canals mod's own Canal on `FEATURE_CANALS_SITE`, which that mod clears in script. So the data doesn't
-  say either way whether a feature survives a tile turning urban; the engine decides, and no run has read a feature
-  on an urban tile. The lab check is below.
+- Every Wonder rule evaluated per tile, built 2026-10-15 and covered by the offline tests, not yet compared with
+  the engine in a game. `pb27` (`woobh-game-pb27.js` in the harness, read-only) switches the mod's wrap off, takes
+  each Wonder's own sites from the engine, and for every bare tile a rule-free control Wonder accepts compares the
+  engine's yes or no with `siteVerdict` from the mod, printing each mismatch with the tile's surroundings. It
+  researches toward a locked subject for up to 28 turns, and it prints any urban tile that holds a feature, which
+  answers the Ubudiah Mosque question below. Run it on an Exploration save (Rila Monastery, Shwedagon Zedi Daw) and
+  on a Modern one (Muzibu Azaala Mpanga, Ubudiah Mosque, Battersea Power Station):
+
+  ```
+  zsh run-harness.sh woobh-game-pb27.js AugustusExp66.Civ7Save pb27-exp 2400 full
+  ```
+
+  A mismatch in the frontier count means the engine's "District" includes rural tiles; add `RURAL` to
+  `FRONTIER_DISTRICT_CLASSES`. Either way a wrong offer costs the player a few seconds of empty hex, because the
+  engine refuses the cleared site and the mod puts the buildings back.
+- Ubudiah Mosque's wet feature on an urban tile. The rule is now read per tile, so a tile is offered as soon as an
+  urban tile holds a Marsh, Oasis, Mangrove, Tundra Bog or Watering Hole. Whether the engine keeps a feature when a
+  tile turns urban isn't in the data: `District_RemovedFeatures` is empty in the 1.5.0 XML and in the compiled copy.
+  `pb27` prints every urban tile that holds a feature.
 - The two options and the eleven translations, built 2026-10-15 and watched in a game the same day. The checks a
   run covers are listed at the end of [OPTIONS.md](OPTIONS.md).
-
-### Lab check: lake adjacency
-
-The guess is that the engine's `AdjacentLake` means "a lake on one of the six neighbours", read the way
-`neighbours()` reads them (`GameplayMap.getAdjacentPlotLocation(loc, dir)` for `dir` 0 to 5) and tested with
-`GameplayMap.isLake`. A lake is a `TERRAIN_COAST` tile that `isLake` answers true for. The game doesn't have a lake
-terrain, so `isLake` is the only thing telling it from sea.
-
-1. Muzibu Azaala Mpanga, Modern age, unlocked by `NODE_CIVIC_MO_MAIN_NATURAL_HISTORY` (or Buganda's
-   `NODE_CIVIC_MO_BUGANDA_NNALUBAALE`). Its only placement rule is `AdjacentLake`. As a control, use World's Fair
-   (`NODE_CIVIC_MO_MAIN_HEGEMONY`) or the Manhattan Project (`NODE_TECH_MO_NUCLEAR_FISSION`), which don't have any
-   placement rule. Both must be unlocked and built nowhere; grant the nodes in the lab if the game hasn't reached them.
-2. Find a city with a lake in reach: for each of the local player's cities, walk `city.getPurchasedPlots()` and each
-   plot's six neighbours, and keep the cities where some neighbour reads `isLake`. If no city has a lake nearby, pick
-   another seed.
-3. Set `globalThis.__bwab.enabled = false`, so `Game.CityOperations.canStart` answers as the engine alone. For each of
-   the two Wonders, call `canStart(cityID, CityOperationTypes.BUILD, { ConstructibleType: <the row's $index> }, false)`
-   and take its `Plots` and `ExpandUrbanPlots`. Set `enabled` back to `true` afterwards.
-4. Filter the control's sites to those with an `isLake` neighbour. The guess holds if that set equals Muzibu Azaala
-   Mpanga's sites. Any Muzibu site without a lake neighbour, or any filtered control site missing from Muzibu's list,
-   proves it wrong; write down which tile and what its neighbours hold (a lake tile with a Fishing Quay on it, a
-   one-tile lake, a navigable river running into the lake).
-5. Shwedagon Zedi Daw, Exploration age, unlocked by `NODE_TECH_EX_EDUCATION`. Every Exploration Wonder has some
-   placement rule, so check it half-way: every site the engine lists has an `isLake` neighbour, and a flat tile with a
-   lake neighbour that Erdene Zuu (`TERRAIN_FLAT` only) is offered is offered to Shwedagon Zedi Daw too.
-
-If both hold, add `lake` to what `neighbours()` reads, refuse in `fitsNeighbours` when `def.AdjacentLake` and no
-neighbour is a lake, take `AdjacentLake` out of `unreadRule`, and move the two Wonders out of the table above.
-
-### Lab check: a wet feature on an urban tile
-
-1. A quick first read in any game: walk every city's `getPurchasedPlots()`, keep the plots whose district is
-   `DISTRICT_URBAN`, and print any that reads a feature at all with `GameplayMap.getFeatureType`.
-2. If none does, find a Marsh or an Oasis inside a city's borders (`getFeatureType` against `FEATURE_MARSH` and
-   `FEATURE_OASIS` over `getPurchasedPlots()`), build any building on it so the tile turns urban, and read the feature
-   again once it stands.
-
-A wet feature still on the tile means such a tile can exist, and Ubudiah Mosque then needs one more check: that the
-engine accepts it on a bare wet tile after the district is cleared. If the feature's gone, the engine clears it on
-building, an antiquated tile can never qualify for Ubudiah Mosque, and leaving it out doesn't cost the player
-anything.
 
 ## The two designs this replaced
 
