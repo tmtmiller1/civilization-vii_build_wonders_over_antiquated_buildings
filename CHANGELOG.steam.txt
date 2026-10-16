@@ -3,6 +3,10 @@ Generated from CHANGELOG.md by scripts/steam-changelog.mjs; release.sh uploads t
 To fix an old Workshop entry, paste the text under its ==== line into that entry's Edit box on the change-notes page.
 A block edited by hand is kept as-is. Delete a block to regenerate it from CHANGELOG.md.
 
+==== 1.1.1 | 2026-10-15 | src c006923fc869 | gen 6fd35c9f26dd ====
+[b]Version 1.1.1 · 15 October 2026[/b]
+• Every Wonder is now checked tile by tile against all of its placement rules, so the Wonders the mod used to skip get the antiquated tiles that fit them. Rila Monastery is offered the ones with no urban tile or city center beside them. Shwedagon Zedi Daw and Muzibu Azaala Mpanga get the ones beside a lake, Ubudiah Mosque the ones on a wet feature such as a marsh, and Battersea Power Station the ones beside Coast. Hale o Keawe, Havana Harbor and the Statue of Liberty are offered a coastal urban tile when the game already accepts them on a bare coast tile of the same city, the way Nan Madol already was.
+
 ==== 1.1.0 | 2026-10-15 | src 24c26ab2ed4d | gen e66a3d27dbe7 ====
 [b]Version 1.1.0 · 15 October 2026[/b]
 • Two settings in Options > Add-ons. [b]Offer antiquated tiles for Wonders[/b] (on by default) switches the mod's offer on or off without leaving the game; off, a Wonder's placement screen shows only the game's own sites. [b]Antiquated means[/b] picks how old a building has to be: from any earlier age (the default, the rule so far) or from two ages back, which in the Modern age counts Antiquity buildings only and in the Exploration age leaves only the game's own sites. Both are kept in the shared settings store the bundled Tower Settings Keeper looks after, so they hold across a restart, and your save stays out of it. The mod reads them once and keeps them in memory, so the production list stays as quick as before.
