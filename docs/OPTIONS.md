@@ -1,7 +1,7 @@
 # The two options
 
-Status: built and covered by the offline tests (`npm run verify`). Not yet watched in a game; the checks a lab run
-needs are at the end.
+Status: built, covered by the offline tests (`npm run verify`) and watched in a game on 2026-10-15. The checks a
+run covers are at the end.
 
 Both sit in Options > Add-ons under a **Build Wonders Over Antiquated Buildings** header, in the main menu and in a
 game. They're the player's own preference, so they live in the shared settings store and never in the save.
@@ -93,7 +93,7 @@ In play that comes to one read when the game loads, one the first time the Optio
 
 ## What a lab run has to show
 
-None of this has been watched in a game yet.
+Watched in a game on 2026-10-15. The list stays as what a run has to cover after a change to the options.
 
 1. The header and both rows show in Options > Add-ons in the main menu and in a game, in English and in one other
    language, with no raw `LOC_` tags.

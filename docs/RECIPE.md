@@ -219,9 +219,8 @@ confirmation of its own at the time, which a probe flag had skipped; both are go
 - A coast Wonder actually landing on a coastal urban tile. The gate needs the engine to accept that Wonder on
   some bare coast tile of the city first; no save to hand has one.
 - Whether any tile is ever refused now. If one is, the cost is the three-second empty hex, not a lost building.
-- Rila Monastery left out for `BuildOnFrontier`, built 2026-10-15 and covered by a test only. Leaving a Wonder out
-  can't cost a building, so it went in before a lab run. In an Exploration game with Rila Monastery unlocked, its
-  placement screen should show only the game's own sites.
+- Rila Monastery left out for `BuildOnFrontier`, built 2026-10-15. Watched the same day: in a game with Rila
+  Monastery unlocked, its placement screen shows only the game's own sites.
 - Lake adjacency (Shwedagon Zedi Daw, Muzibu Azaala Mpanga), not built. It's worth building only if the engine's
   `AdjacentLake` test is "one of the six neighbours reads `GameplayMap.isLake`". The lab check that could prove that
   wrong is below.
@@ -232,8 +231,8 @@ confirmation of its own at the time, which a probe flag had skipped; both are go
   rule is the Canals mod's own Canal on `FEATURE_CANALS_SITE`, which that mod clears in script. So the data doesn't
   say either way whether a feature survives a tile turning urban; the engine decides, and no run has read a feature
   on an urban tile. The lab check is below.
-- The two options and the eleven translations, built 2026-10-15 and covered offline only. The lab checks are listed
-  at the end of [OPTIONS.md](OPTIONS.md).
+- The two options and the eleven translations, built 2026-10-15 and watched in a game the same day. The checks a
+  run covers are listed at the end of [OPTIONS.md](OPTIONS.md).
 
 ### Lab check: lake adjacency
 

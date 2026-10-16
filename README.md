@@ -157,9 +157,9 @@ with no prompt of the mod's own, the yield preview on the hex and in the panel, 
 with nothing lost, a live LAN game, and the tile going from its buildings straight to the Wonder's construction
 site with no empty ground in between. Each step and the run behind it is in [docs/RECIPE.md](docs/RECIPE.md).
 
-The two options, the translations and leaving out Rila Monastery are built and pass the offline tests, but they
-haven't been watched in a game yet. What a lab run has to show is listed at the end of
-[docs/OPTIONS.md](docs/OPTIONS.md).
+The two options and leaving out Rila Monastery were watched in a game on 2026-10-15: the switch and the age rule
+in Options > Add-ons do what their labels say, and Rila Monastery's placement screen shows only the game's own
+sites. What a run covers is listed at the end of [docs/OPTIONS.md](docs/OPTIONS.md).
 
 ## Layout
 

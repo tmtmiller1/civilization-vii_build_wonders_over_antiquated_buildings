@@ -4,7 +4,7 @@ All notable changes to Build Wonders Over Antiquated Buildings are documented he
 versioning. The history of the routes that were tried before this design, and the probe runs behind them, is in
 `mod_ideas_tested/build_wonders_over_antiquated_buildings/CHANGELOG-2026-09-24-before-split.md`.
 
-## [Unreleased]
+## [1.1.0] - 2026-10-15
 
 - Two settings in Options > Add-ons. **Offer antiquated tiles for Wonders** (on by default) switches the mod's offer
   on or off without leaving the game; off, a Wonder's placement screen shows only the game's own sites.
