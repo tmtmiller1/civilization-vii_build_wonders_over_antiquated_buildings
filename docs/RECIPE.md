@@ -238,25 +238,61 @@ confirmation of its own at the time, which a probe flag had skipped; both are go
 - A coast Wonder actually landing on a coastal urban tile. The gate needs the engine to accept that Wonder on
   some bare coast tile of the city first; no save to hand has one.
 - Whether any tile is ever refused now. If one is, the cost is the three-second empty hex, not a lost building.
-- Every Wonder rule evaluated per tile, built 2026-10-15 and covered by the offline tests, not yet compared with
-  the engine in a game. `pb27` (`woobh-game-pb27.js` in the harness, read-only) switches the mod's wrap off, takes
-  each Wonder's own sites from the engine, and for every bare tile a rule-free control Wonder accepts compares the
-  engine's yes or no with `siteVerdict` from the mod, printing each mismatch with the tile's surroundings. It
-  researches toward a locked subject for up to 28 turns, and it prints any urban tile that holds a feature, which
-  answers the Ubudiah Mosque question below. Run it on an Exploration save (Rila Monastery, Shwedagon Zedi Daw) and
-  on a Modern one (Muzibu Azaala Mpanga, Ubudiah Mosque, Battersea Power Station):
+- Every Wonder rule evaluated per tile, compared with the engine on 2026-10-17 (`pb27`, lab games on Exploration and
+  Modern seed 4242, and the harness on AugustusExp66 with the live 1.1.1). The script first counted canStart's
+  `MountainPlots` as sites; that list is the same for every constructible, a refused one included, so it's left out
+  now. Candidates are every bare tile the city owns plus every tile a Wonder of the age is offered, and the plain
+  buildings of the age (water ones with RiverPlacement ANCHORED included).
+
+  | Game | Subjects reached | Compared | Mismatches |
+  | --- | --- | --- | --- |
+  | Exploration 4242, turn 11 | 4 of 4 | 108 | 8 |
+  | Modern 4242, turn 7 | 4 of 4 | 116 | 7 |
+  | AugustusExp66, turn 68 | 3 of 4 | 1785 | 84 |
+
+  Every engine-no / rules-yes mismatch is a tile with a resource or a mountain:
+  - Exploration: 62,23 (flat, rural, Rainforest, Ivory, a lake beside it): Shwedagon and Rila. 59,24 (flat, rural,
+    Sugar, river): Rila. Mountains 63,22 (Volcano, two lakes beside it), 59,23 (a lake beside it), 58,25: Shwedagon
+    and Rila.
+  - Modern: 65,25 (flat, rural, Mangrove, Rice, coast beside it): Ubudiah and Battersea. 65,23 (flat, rural,
+    Rainforest, Spices, two lakes beside it): Muzibu and Battersea. 64,26 (coast, rural, Fish): Statue of Liberty.
+    Mountain 63,22 (Volcano): Muzibu and Battersea.
+  - AugustusExp66: Rila 33 resource tiles and 29 mountains, Shwedagon 13 and 5.
+
+  Taking the Ivory off 62,23 made the engine accept Shwedagon, Rila and Buseoksa there; taking the Rice off 65,25 did
+  the same for Ubudiah and Battersea; putting each back refused them again. So the engine refuses a Wonder on any tile
+  with a resource, and the rules only read `Constructible_ValidResources`. Neither gap reaches a tile the mod offers
+  now: no urban tile on either map held a resource, no open building was offered a resource tile, and a mountain is
+  never urban. It would matter only if a resource ever appeared under an urban tile.
+
+  One mismatch the other way, AugustusExp66: the engine took Rila Monastery on four tiles whose only district
+  neighbours are rural and a Wonder (90,29 hill; 85,17 flat on the coast; 84,18 hill; 84,19 Sagebrush Steppe), and the
+  rules refused them. The engine doesn't count a Wonder district against the frontier rule, but
+  `FRONTIER_DISTRICT_CLASSES` lists `WONDER`. Rila isn't offered on urban tiles, so this costs nothing today.
+  Rural neighbours never blocked it (accepted tiles by neighbour classes: RURAL 177, RURAL+WILDERNESS 7, RURAL+WONDER 4).
+
+  Shwedagon and Muzibu: every tile the engine took has a lake beside it (7, 8 and 26 tiles), none without, so
+  AdjacentLake reads "a lake among the six neighbours". Hale o Keawe agreed 27 of 27 in Exploration 4242. Havana Harbor
+  got no engine yes anywhere (no city in distant lands). Hale o Keawe was locked in every AugustusExp66 city.
+
+  Two rule changes wait on the owner: refusing a tile that holds a resource, and dropping `WONDER` from
+  `FRONTIER_DISTRICT_CLASSES`. Still to compare: Havana Harbor (a save with a city in distant lands), Hale o Keawe on a
+  save where it isn't built yet, and Ubudiah Mosque on a wet urban tile. The harness now holds the live
+  `Mods/build-wonders-over-antiquated-buildings` aside and puts it back (or uses it as it is with `live`):
 
   ```
-  zsh run-harness.sh woobh-game-pb27.js AugustusExp66.Civ7Save pb27-exp 2400 full
+  zsh run-harness.sh woobh-game-pb27.js AugustusExp66.Civ7Save pb27-exp66-live 2400 live
   ```
 
-  A mismatch in the frontier count means the engine's "District" includes rural tiles; add `RURAL` to
-  `FRONTIER_DISTRICT_CLASSES`. Either way a wrong offer costs the player a few seconds of empty hex, because the
-  engine refuses the cleared site and the mod puts the buildings back.
 - Ubudiah Mosque's wet feature on an urban tile. The rule is now read per tile, so a tile is offered as soon as an
   urban tile holds a Marsh, Oasis, Mangrove, Tundra Bog or Watering Hole. Whether the engine keeps a feature when a
   tile turns urban isn't in the data: `District_RemovedFeatures` is empty in the 1.5.0 XML and in the compiled copy.
-  `pb27` prints every urban tile that holds a feature.
+  `pb27` prints every urban tile that holds a feature. On 2026-10-17 only Rainforest was seen on urban tiles.
+- Canals + Build Wonders, a Canal left unfinished on an urban tile at the age's end. 2026-10-17 `lab3-A` (usual set,
+  Exploration 9001 into Modern) didn't reach it: the Canal queued on 29,36 at progress 116 finished on the age's last
+  turn (Roma's production overflow carried it to 61% in one turn), so no unfinished Canal crossed. For the next try:
+  Oxford University (`NODE_TECH_MO_ACADEMICS`, the cheapest Modern Wonder to unlock, its only rule an urban neighbour)
+  is the Wonder to test the tile with.
 - The two options and the eleven translations, built 2026-10-15 and watched in a game the same day. The checks a
   run covers are listed at the end of [OPTIONS.md](OPTIONS.md).
 
