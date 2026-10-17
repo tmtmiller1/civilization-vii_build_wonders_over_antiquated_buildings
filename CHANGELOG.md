@@ -4,6 +4,12 @@ All notable changes to Build Wonders Over Antiquated Buildings are documented he
 versioning. The history of the routes that were tried before this design, and the probe runs behind them, is in
 `mod_ideas_tested/build_wonders_over_antiquated_buildings/CHANGELOG-2026-09-24-before-split.md`.
 
+## [Unreleased]
+
+- Carries Civilopedia History Corrections. With Civilopedia Expanded: Independents on, six East Asian history pages
+  in the Civilopedia (Goguryeo, the Oirat, two Ryukyu pages, Nanzhao and Balhae) give each side where historians in
+  different countries disagree, and a few factual errors are fixed. With it off, the game's pages stay as they are.
+
 ## [1.1.1] - 2026-10-15
 
 - Every Wonder is now checked tile by tile against all of its placement rules, so the Wonders the mod used to skip
