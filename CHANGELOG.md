@@ -4,8 +4,12 @@ All notable changes to Build Wonders Over Antiquated Buildings are documented he
 versioning. The history of the routes that were tried before this design, and the probe runs behind them, is in
 `mod_ideas_tested/build_wonders_over_antiquated_buildings/CHANGELOG-2026-09-24-before-split.md`.
 
-## [Unreleased]
+## [1.1.2] - 2026-10-17
 
+- License: from this version the mod is under the Tower Mod License 1.0, in LICENSE. You can still play it, read the
+  code and change your own copy for your own games. Reuploading it, reusing its code in other projects and using it
+  to train AI need my written permission. Earlier versions stay under MIT, and `ui/settings-keeper.js` stays MIT so
+  other mods can keep embedding it.
 - Carries Civilopedia History Corrections. With Civilopedia Expanded: Independents on, six East Asian history pages
   in the Civilopedia (Goguryeo, the Oirat, two Ryukyu pages, Nanzhao and Balhae) give each side where historians in
   different countries disagree, and a few factual errors are fixed. With it off, the game's pages stay as they are.
